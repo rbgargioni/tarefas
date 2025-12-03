@@ -24,7 +24,6 @@
     .container {
         width: 100%;
         max-width: 1400px;
-        aspect-ratio: 16 / 9;
         background-color: white;
         border: 3px solid #333;
         border-radius: 8px;
@@ -71,6 +70,7 @@
         color: white;
         position: sticky;
         top: 0;
+        z-index: 2;
     }
 
     th {
@@ -94,11 +94,9 @@
     td {
         border: 2px solid #bdc3c7;
         padding: 20px;
-        text-align: left;
+        text-align: center;
         font-size: 1.1em;
         vertical-align: middle;
-        min-height: 70px;
-        position: relative;
     }
 
     .task-cell {
@@ -124,17 +122,6 @@
         word-wrap: break-word;
     }
 
-    .checkbox-cell {
-        text-align: center;
-        cursor: pointer;
-        user-select: none;
-        font-size: 1.5em;
-    }
-
-    .checkbox-cell:hover {
-        background-color: #d5dbdb;
-    }
-
     .checkbox {
         width: 25px;
         height: 25px;
@@ -157,6 +144,23 @@
         background-color: #229954;
     }
 
+    .clear-button {
+        margin-top: 15px;
+        padding: 12px 24px;
+        background-color: #c0392b;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-left: 10px;
+    }
+
+    .clear-button:hover {
+        background-color: #922b21;
+    }
+
     /* ----------------------- */
     /*        PRINT            */
     /* ----------------------- */
@@ -175,7 +179,6 @@
             max-width: 100%;
             box-shadow: none;
             padding: 10px;
-            aspect-ratio: auto; /* remove restrição */
         }
 
         .header h1 {
@@ -206,7 +209,8 @@
             height: 16px;
         }
 
-        .print-button {
+        .print-button,
+        .clear-button {
             display: none;
         }
     }
@@ -239,102 +243,139 @@
                             <div class="task-icon">🪥</div>
                             <div class="task-label">Escovar os<br>Dentes</div>
                         </td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
                     </tr>
+
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">🧸</div>
-                            <div class="task-label">Guardar<br> os Brinquedos</div>
+                            <div class="task-label">Guardar<br>os Brinquedos</div>
                         </td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
                     </tr>
+
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">🛏️</div>
                             <div class="task-label">Arrumar a Cama</div>
                         </td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
                     </tr>
+
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">📚</div>
                             <div class="task-label">Fazer as Tarefas</div>
                         </td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
                     </tr>
+
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">🍽️</div>
                             <div class="task-label">Comer Bem</div>
                         </td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
                     </tr>
+
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">🤐</div>
                             <div class="task-label">Não Falar Palavrão</div>
                         </td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
                     </tr>
+
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">👕</div>
                             <div class="task-label">Guardar as Roupas</div>
                         </td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
                     </tr>
+
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">🚿</div>
                             <div class="task-label">Tomar Banho</div>
                         </td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
-                        <td class="checkbox-cell"><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td><input type="checkbox" class="checkbox"></td>
                     </tr>
+
                 </tbody>
             </table>
         </div>
 
-        <button class="print-button" onclick="window.print()">🖨️ Imprimir</button>
+        <div style="display:flex; gap:10px;">
+            <button class="print-button" onclick="window.print()">🖨️ Imprimir</button>
+
+            <button class="clear-button" onclick="if(confirm('Deseja limpar todos os checks?')){localStorage.clear();location.reload();}">
+                🔄 Limpar Semana
+            </button>
+        </div>
     </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+
+    // Dar ID único para cada checkbox
+    checkboxes.forEach((cb, index) => {
+        if (!cb.id) cb.id = "chk_" + index;
+
+        // Restaurar do localStorage
+        const saved = localStorage.getItem(cb.id);
+        if (saved === "true") cb.checked = true;
+
+        // Salvar mudança
+        cb.addEventListener("change", () => {
+            localStorage.setItem(cb.id, cb.checked);
+        });
+    });
+    
+});
+</script>
+
 </body>
 </html>
