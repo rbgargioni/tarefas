@@ -7,20 +7,19 @@
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f5f5f5;
-    padding: 20px;
+    padding: 15px;
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 100vh;
 }
 
 .container {
     width: 100%;
-    max-width: 1400px;
+    max-width: 1200px; /* diminuído para caber no iPad */
     background-color: white;
     border: 3px solid #333;
     border-radius: 8px;
-    padding: 30px;
+    padding: 25px; /* menor */
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
@@ -36,25 +35,26 @@ body {
     align-items: center;
 }
 
+/* Título menor e equilibrado para iPad */
 .header-line h1 {
-    font-size: 3em;
+    font-size: 2.4em;   /* antes era 3.0 */
     color: #333;
     font-weight: bold;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
 }
 
 .subtitle {
     text-align: center;
     color: #666;
-    font-size: 1.2em;
+    font-size: 1.1em;
     margin-top: 8px;
 }
 
-/* Progress Ring */
+/* Progress Ring – reduzido */
 .progress-ring {
     position: relative;
-    width: 90px;
-    height: 90px;
+    width: 75px;   /* antes era 90px */
+    height: 75px;
 }
 
 .progress-ring svg {
@@ -64,13 +64,13 @@ body {
 .progress-ring-bg {
     fill: none;
     stroke: #e0e0e0;
-    stroke-width: 10;
+    stroke-width: 9;
 }
 
 .progress-ring-progress {
     fill: none;
     stroke: #27ae60;
-    stroke-width: 10;
+    stroke-width: 9;
     stroke-linecap: round;
     stroke-dasharray: 219.8;
     stroke-dashoffset: 219.8;
@@ -83,15 +83,15 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1em; /* menor */
     color: #333;
 }
 
-/* Tabela */
+/* TABELA */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 thead {
@@ -100,18 +100,18 @@ thead {
 }
 
 th {
-    padding: 15px;
+    padding: 12px; /* antes era 15 */
     text-align: center;
     border: 2px solid #34495e;
     text-transform: uppercase;
-    font-size: 1.2em;
+    font-size: 1.05em; /* menor */
 }
 
 td {
     border: 2px solid #bdc3c7;
-    padding: 15px;
+    padding: 12px; /* antes era 15 */
     text-align: center;
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
 .task-cell {
@@ -119,20 +119,21 @@ td {
     flex-direction: column;
     align-items: center;
     font-weight: bold;
-    gap: 6px;
+    gap: 5px;
 }
 
 .task-icon {
-    font-size: 2.6em;
+    font-size: 2.2em; /* antes 2.6 */
 }
 
+/* Checkbox mais compacto */
 .checkbox {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     cursor: pointer;
 }
 
-/* Dia Atual */
+/* Dia atual */
 .dia-atual {
     background-color: #ffeaa7 !important;
     border-color: #fdcb6e !important;
@@ -145,15 +146,15 @@ thead .dia-atual {
 
 /* Botões */
 .buttons {
-    margin-top: 20px;
+    margin-top: 18px;
     display: flex;
     gap: 15px;
     justify-content: center;
 }
 
 .btn {
-    padding: 12px 25px;
-    font-size: 1.1em;
+    padding: 10px 22px; /* menor */
+    font-size: 1em;      /* menor */
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -179,6 +180,36 @@ thead .dia-atual {
     z-index: 99999;
 }
 
+/* PRINT */
 @media print {
     .btn, .progress-ring { display: none; }
+}
+
+/* =============================== */
+/*       RESPONSIVIDADE iPAD       */
+/* =============================== */
+
+/* iPad Air horizontal (1180×820) */
+@media (max-width: 1180px) {
+    .container { max-width: 1100px; }
+    .header-line h1 { font-size: 2.2em; }
+    th, td { padding: 10px; font-size: 0.95em; }
+    .task-icon { font-size: 2em; }
+    .checkbox { width: 24px; height: 24px; }
+}
+
+/* iPad vertical (820px) */
+@media (max-width: 900px) {
+    .header-line h1 { font-size: 1.9em; }
+    .progress-ring { width: 65px; height: 65px; }
+    th, td { padding: 8px; }
+    .task-icon { font-size: 1.8em; }
+    .checkbox { width: 22px; height: 22px; }
+}
+
+/* Tablets menores e celulares grandes */
+@media (max-width: 768px) {
+    .header-line h1 { font-size: 1.7em; }
+    .progress-ring { width: 60px; height: 60px; }
+    th, td { padding: 6px; font-size: 0.9em; }
 }
