@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quadro de Tarefas</title>
- <style>
+
+<style>
     * {
         margin: 0;
         padding: 0;
@@ -41,9 +42,8 @@
     .header h1 {
         font-size: 3em;
         color: #333;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        letter-spacing: 3px;
         font-weight: bold;
+        letter-spacing: 3px;
     }
 
     .subtitle {
@@ -62,12 +62,11 @@
     table {
         width: 100%;
         border-collapse: collapse;
-        flex: 1;
     }
 
     thead {
         background-color: #2c3e50;
-        
+        color: white;
         position: sticky;
         top: 0;
         z-index: 2;
@@ -77,18 +76,8 @@
         padding: 15px;
         text-align: center;
         font-size: 1.3em;
-        font-weight: bold;
         border: 2px solid #34495e;
         text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    tr:nth-child(even) {
-        background-color: #ecf0f1;
-    }
-
-    tr:nth-child(odd) {
-        background-color: white;
     }
 
     td {
@@ -96,30 +85,19 @@
         padding: 20px;
         text-align: center;
         font-size: 1.1em;
-        vertical-align: middle;
     }
 
     .task-cell {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        gap: 8px;
         font-weight: bold;
         color: #2c3e50;
-        min-width: 180px;
-        max-width: 200px;
+        gap: 8px;
     }
 
     .task-icon {
         font-size: 3em;
-        line-height: 1;
-    }
-
-    .task-label {
-        font-size: 0.9em;
-        text-align: center;
-        word-wrap: break-word;
     }
 
     .checkbox {
@@ -137,7 +115,7 @@
         border-radius: 5px;
         font-size: 1.1em;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: 0.3s;
     }
 
     .print-button:hover {
@@ -153,7 +131,7 @@
         border-radius: 5px;
         font-size: 1.1em;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: 0.3s;
         margin-left: 10px;
     }
 
@@ -161,63 +139,37 @@
         background-color: #922b21;
     }
 
-    /* ----------------------- */
-    /*        PRINT            */
-    /* ----------------------- */
+    /* ➤ Cor da coluna do dia atual */
+    .dia-atual {
+        background-color: #ffeaa7 !important;
+        border-color: #fdcb6e !important;
+    }
+
+    thead .dia-atual {
+        background-color: #e17055 !important;
+        color: white !important;
+    }
+
+    /* Impressão */
     @page {
-        size: A4 landscape; /* horizontal */
+        size: A4 landscape;
         margin: 10mm;
     }
 
     @media print {
+        .print-button, .clear-button {
+            display: none;
+        }
         body {
             padding: 0;
             background-color: white;
-        }
-
-        .container {
-            max-width: 100%;
-            box-shadow: none;
-            padding: 10px;
-        }
-
-        .header h1 {
-            font-size: 1.8em;
-        }
-
-        th {
-            font-size: 0.9em;
-            padding: 6px;
-        }
-
-        td {
-            padding: 6px;
-            font-size: 0.85em;
-            min-height: 30px;
-        }
-
-        .task-icon {
-            font-size: 1.8em;
-        }
-
-        .task-label {
-            font-size: 0.7em;
-        }
-
-        .checkbox {
-            width: 16px;
-            height: 16px;
-        }
-
-        .print-button,
-        .clear-button {
-            display: none;
         }
     }
 </style>
 
 </head>
 <body>
+
     <div class="container">
         <div class="header">
             <h1>QUADRO DE TAREFAS</h1>
@@ -238,10 +190,11 @@
                     </tr>
                 </thead>
                 <tbody>
+
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">🪥</div>
-                            <div class="task-label">Escovar os Dentes</div>
+                            Escovar os Dentes
                         </td>
                         <td><input type="checkbox" class="checkbox"></td>
                         <td><input type="checkbox" class="checkbox"></td>
@@ -254,7 +207,7 @@
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">🧸</div>
-                            <div class="task-label">Guardar<br>os Brinquedos</div>
+                            Guardar os Brinquedos
                         </td>
                         <td><input type="checkbox" class="checkbox"></td>
                         <td><input type="checkbox" class="checkbox"></td>
@@ -267,7 +220,7 @@
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">🛏️</div>
-                            <div class="task-label">Arrumar a Cama</div>
+                            Arrumar a Cama
                         </td>
                         <td><input type="checkbox" class="checkbox"></td>
                         <td><input type="checkbox" class="checkbox"></td>
@@ -280,7 +233,7 @@
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">📚</div>
-                            <div class="task-label">Fazer as Tarefas</div>
+                            Fazer as Tarefas
                         </td>
                         <td><input type="checkbox" class="checkbox"></td>
                         <td><input type="checkbox" class="checkbox"></td>
@@ -293,7 +246,7 @@
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">🍽️</div>
-                            <div class="task-label">Comer Bem</div>
+                            Comer Bem
                         </td>
                         <td><input type="checkbox" class="checkbox"></td>
                         <td><input type="checkbox" class="checkbox"></td>
@@ -306,7 +259,7 @@
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">🤐</div>
-                            <div class="task-label">Não Falar Palavrão</div>
+                            Não Falar Palavrão
                         </td>
                         <td><input type="checkbox" class="checkbox"></td>
                         <td><input type="checkbox" class="checkbox"></td>
@@ -319,7 +272,7 @@
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">👕</div>
-                            <div class="task-label">Guardar as Roupas</div>
+                            Guardar as Roupas
                         </td>
                         <td><input type="checkbox" class="checkbox"></td>
                         <td><input type="checkbox" class="checkbox"></td>
@@ -332,7 +285,7 @@
                     <tr>
                         <td class="task-cell">
                             <div class="task-icon">🚿</div>
-                            <div class="task-label">Tomar Banho</div>
+                            Tomar Banho
                         </td>
                         <td><input type="checkbox" class="checkbox"></td>
                         <td><input type="checkbox" class="checkbox"></td>
@@ -349,7 +302,8 @@
         <div style="display:flex; gap:10px;">
             <button class="print-button" onclick="window.print()">🖨️ Imprimir</button>
 
-            <button class="clear-button" onclick="if(confirm('Deseja limpar todos os checks?')){localStorage.clear();location.reload();}">
+            <button class="clear-button"
+                onclick="if(confirm('Deseja limpar todos os checks?')){localStorage.clear();location.reload();}">
                 🔄 Limpar Semana
             </button>
         </div>
@@ -358,21 +312,58 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
+    /* -------------------------------- */
+    /* 1. SALVAR CHECKBOXES NO CACHE */
+    /* -------------------------------- */
     const checkboxes = document.querySelectorAll("input[type='checkbox']");
 
-    // Dar ID único para cada checkbox
     checkboxes.forEach((cb, index) => {
         if (!cb.id) cb.id = "chk_" + index;
 
-        // Restaurar do localStorage
         const saved = localStorage.getItem(cb.id);
         if (saved === "true") cb.checked = true;
 
-        // Salvar mudança
         cb.addEventListener("change", () => {
             localStorage.setItem(cb.id, cb.checked);
         });
     });
+
+    /* -------------------------------- */
+    /* 2. "SEMANA DE ___" = DATA ATUAL */
+    /* -------------------------------- */
+    const hoje = new Date();
+    const dia = hoje.getDate().toString().padStart(2, "0");
+    const mes = (hoje.getMonth() + 1).toString().padStart(2, "0");
+    const ano = hoje.getFullYear();
+
+    document.querySelector(".subtitle").textContent =
+        `Semana de ${dia}/${mes}/${ano}`;
+
+    /* -------------------------------- */
+    /* 3. DESTACAR A COLUNA DO DIA ATUAL */
+    /* -------------------------------- */
+
+    const diaSemana = hoje.getDay();
+    // 0 domingo, 1 segunda, 2 terça, 3 quarta, 4 quinta, 5 sexta, 6 sábado
+
+    const indiceColuna = {
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 4,
+        5: 5,
+        6: 6
+    };
+
+    if (diaSemana !== 0) { 
+        const col = indiceColuna[diaSemana];
+
+        document.querySelectorAll("table tr").forEach(row => {
+            const celula = row.children[col];
+            if (celula)
+                celula.classList.add("dia-atual");
+        });
+    }
 
 });
 </script>
