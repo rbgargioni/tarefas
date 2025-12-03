@@ -29,17 +29,22 @@
         border: 3px solid #333;
         border-radius: 8px;
         padding: 30px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         display: flex;
         flex-direction: column;
     }
 
     .header {
-        text-align: center;
         margin-bottom: 20px;
     }
 
-    .header h1 {
+    .header-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-line h1 {
         font-size: 3em;
         color: #333;
         font-weight: bold;
@@ -47,21 +52,54 @@
     }
 
     .subtitle {
+        text-align: center;
         color: #666;
         font-size: 1.2em;
-        margin-top: 5px;
+        margin-top: 8px;
     }
 
-    .table-wrapper {
-        flex: 1;
-        overflow-x: auto;
-        display: flex;
-        flex-direction: column;
+    /* Relógio gráfico */
+    .progress-ring {
+        position: relative;
+        width: 90px;
+        height: 90px;
     }
 
+    .progress-ring svg {
+        transform: rotate(-90deg);
+    }
+
+    .progress-ring-bg {
+        fill: none;
+        stroke: #e0e0e0;
+        stroke-width: 10;
+    }
+
+    .progress-ring-progress {
+        fill: none;
+        stroke: #27ae60;
+        stroke-width: 10;
+        stroke-linecap: round;
+        stroke-dasharray: 219.8;
+        stroke-dashoffset: 219.8;
+        transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .progress-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+        font-size: 1.1em;
+        color: #333;
+    }
+
+    /* Tabela */
     table {
         width: 100%;
         border-collapse: collapse;
+        margin-top: 20px;
     }
 
     thead {
@@ -75,14 +113,14 @@
     th {
         padding: 15px;
         text-align: center;
-        font-size: 1.3em;
         border: 2px solid #34495e;
         text-transform: uppercase;
+        font-size: 1.2em;
     }
 
     td {
         border: 2px solid #bdc3c7;
-        padding: 20px;
+        padding: 15px;
         text-align: center;
         font-size: 1.1em;
     }
@@ -92,54 +130,20 @@
         flex-direction: column;
         align-items: center;
         font-weight: bold;
-        color: #2c3e50;
-        gap: 8px;
+        gap: 6px;
     }
 
     .task-icon {
-        font-size: 3em;
+        font-size: 2.6em;
     }
 
     .checkbox {
-        width: 25px;
-        height: 25px;
+        width: 28px;
+        height: 28px;
         cursor: pointer;
     }
 
-    .print-button {
-        margin-top: 15px;
-        padding: 12px 24px;
-        background-color: #27ae60;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 1.1em;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .print-button:hover {
-        background-color: #229954;
-    }
-
-    .clear-button {
-        margin-top: 15px;
-        padding: 12px 24px;
-        background-color: #c0392b;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 1.1em;
-        cursor: pointer;
-        transition: 0.3s;
-        margin-left: 10px;
-    }
-
-    .clear-button:hover {
-        background-color: #922b21;
-    }
-
-    /* ➤ Cor da coluna do dia atual */
+    /* Dia atual */
     .dia-atual {
         background-color: #ffeaa7 !important;
         border-color: #fdcb6e !important;
@@ -150,221 +154,276 @@
         color: white !important;
     }
 
-    /* Impressão */
-    @page {
-        size: A4 landscape;
-        margin: 10mm;
+    /* Botões */
+    .buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        font-size: 1.1em;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        color: white;
+        transition: 0.3s;
+    }
+
+    .btn-print { background-color: #27ae60; }
+    .btn-print:hover { background-color: #1e8449; }
+
+    .btn-clear { background-color: #c0392b; }
+    .btn-clear:hover { background-color: #922b21; }
+
+    /* Canvas dos fogos */
+    #fireworksCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        display: none;
+        z-index: 99999;
     }
 
     @media print {
-        .print-button, .clear-button {
-            display: none;
-        }
-        body {
-            padding: 0;
-            background-color: white;
-        }
+        .btn, .progress-ring { display: none; }
     }
 </style>
-
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
+<canvas id="fireworksCanvas"></canvas>
+
+<div class="container">
+
+    <div class="header">
+        <div class="header-line">
             <h1>QUADRO DE TAREFAS</h1>
-            <p class="subtitle">Semana de ____________</p>
+
+            <div class="progress-ring">
+                <svg width="90" height="90">
+                    <circle class="progress-ring-bg" cx="45" cy="45" r="35"/>
+                    <circle class="progress-ring-progress" cx="45" cy="45" r="35"/>
+                </svg>
+                <div class="progress-text">0%</div>
+            </div>
         </div>
 
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>TAREFAS</th>
-                        <th>SEGUNDA</th>
-                        <th>TERÇA</th>
-                        <th>QUARTA</th>
-                        <th>QUINTA</th>
-                        <th>SEXTA</th>
-                        <th>SÁBADO</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <tr>
-                        <td class="task-cell">
-                            <div class="task-icon">🪥</div>
-                            Escovar os Dentes
-                        </td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                    </tr>
-
-                    <tr>
-                        <td class="task-cell">
-                            <div class="task-icon">🧸</div>
-                            Guardar os Brinquedos
-                        </td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                    </tr>
-
-                    <tr>
-                        <td class="task-cell">
-                            <div class="task-icon">🛏️</div>
-                            Arrumar a Cama
-                        </td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                    </tr>
-
-                    <tr>
-                        <td class="task-cell">
-                            <div class="task-icon">📚</div>
-                            Fazer as Tarefas
-                        </td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                    </tr>
-
-                    <tr>
-                        <td class="task-cell">
-                            <div class="task-icon">🍽️</div>
-                            Comer Bem
-                        </td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                    </tr>
-
-                    <tr>
-                        <td class="task-cell">
-                            <div class="task-icon">🤐</div>
-                            Não Falar Palavrão
-                        </td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                    </tr>
-
-                    <tr>
-                        <td class="task-cell">
-                            <div class="task-icon">👕</div>
-                            Guardar as Roupas
-                        </td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                    </tr>
-
-                    <tr>
-                        <td class="task-cell">
-                            <div class="task-icon">🚿</div>
-                            Tomar Banho
-                        </td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                        <td><input type="checkbox" class="checkbox"></td>
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
-
-        <div style="display:flex; gap:10px;">
-            <button class="print-button" onclick="window.print()">🖨️ Imprimir</button>
-
-            <button class="clear-button"
-                onclick="if(confirm('Deseja limpar todos os checks?')){localStorage.clear();location.reload();}">
-                🔄 Limpar Semana
-            </button>
-        </div>
+        <p class="subtitle">Semana de ______</p>
     </div>
 
+    <table>
+        <thead>
+            <tr>
+                <th>TAREFAS</th>
+                <th>SEGUNDA</th>
+                <th>TERÇA</th>
+                <th>QUARTA</th>
+                <th>QUINTA</th>
+                <th>SEXTA</th>
+                <th>SÁBADO</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <!-- LINHAS DE TAREFAS -->
+            <tr>
+                <td class="task-cell"><div class="task-icon">🪥</div>Escovar os Dentes</td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td class="task-cell"><div class="task-icon">🧸</div>Guardar os Brinquedos</td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td class="task-cell"><div class="task-icon">🛏️</div>Arrumar a Cama</td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td class="task-cell"><div class="task-icon">📚</div>Fazer as Tarefas</td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td class="task-cell"><div class="task-icon">🍽️</div>Comer Bem</td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td class="task-cell"><div class="task-icon">🤐</div>Não falar palavrão</td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td class="task-cell"><div class="task-icon">👕</div>Guardar as Roupas</td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+            </tr>
+
+            <tr>
+                <td class="task-cell"><div class="task-icon">🚿</div>Tomar Banho</td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td><td><input type="checkbox" class="checkbox"></td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <div class="buttons">
+        <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
+
+        <button class="btn btn-clear"
+            onclick="if(confirm('Deseja limpar todos os checks?')){localStorage.clear();location.reload();}">
+            🔄 Limpar Semana
+        </button>
+    </div>
+
+</div>
+
 <script>
+/* ============================== */
+/* Fogos de Artifício 🎆          */
+/* ============================== */
+function iniciarFogos() {
+    const canvas = document.getElementById("fireworksCanvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.style.display = "block";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    function random(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function createFirework() {
+        const x = random(100, window.innerWidth - 100);
+        const y = random(50, window.innerHeight / 2);
+
+        for (let i = 0; i < 60; i++) {
+            particles.push({
+                x,
+                y,
+                angle: random(0, Math.PI * 2),
+                speed: random(2, 6),
+                radius: 2,
+                life: 60,
+                color: `hsl(${random(0, 360)}, 100%, 60%)`
+            });
+        }
+    }
+
+    function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach((p, i) => {
+            p.x += Math.cos(p.angle) * p.speed;
+            p.y += Math.sin(p.angle) * p.speed;
+            p.life--;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+
+            if (p.life <= 0) particles.splice(i, 1);
+        });
+
+        if (Math.random() < 0.05) createFirework();
+
+        if (particles.length > 0) {
+            requestAnimationFrame(loop);
+        } else {
+            canvas.style.display = "none";
+        }
+    }
+
+    createFirework();
+    loop();
+}
+
+/* ============================== */
+/* Principal                      */
+/* ============================== */
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* -------------------------------- */
-    /* 1. SALVAR CHECKBOXES NO CACHE */
-    /* -------------------------------- */
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    const checkboxes = document.querySelectorAll(".checkbox");
 
-    checkboxes.forEach((cb, index) => {
-        if (!cb.id) cb.id = "chk_" + index;
+    checkboxes.forEach((cb, i) => {
+        if (!cb.id) cb.id = "chk_" + i;
 
         const saved = localStorage.getItem(cb.id);
         if (saved === "true") cb.checked = true;
 
         cb.addEventListener("change", () => {
             localStorage.setItem(cb.id, cb.checked);
+            atualizarRelogio();
         });
     });
 
-    /* -------------------------------- */
-    /* 2. "SEMANA DE ___" = DATA ATUAL */
-    /* -------------------------------- */
+    /* Data atual */
     const hoje = new Date();
-    const dia = hoje.getDate().toString().padStart(2, "0");
-    const mes = (hoje.getMonth() + 1).toString().padStart(2, "0");
-    const ano = hoje.getFullYear();
+    const d = String(hoje.getDate()).padStart(2, "0");
+    const m = String(hoje.getMonth() + 1).padStart(2, "0");
+    const a = hoje.getFullYear();
 
     document.querySelector(".subtitle").textContent =
-        `Semana de ${dia}/${mes}/${ano}`;
+        `Semana de ${d}/${m}/${a}`;
 
-    /* -------------------------------- */
-    /* 3. DESTACAR A COLUNA DO DIA ATUAL    */
-    /* -------------------------------- */
+    /* Destacar dia da semana */
+    const dia = hoje.getDay();
+    const map = {1:1,2:2,3:3,4:4,5:5,6:6};
 
-    const diaSemana = hoje.getDay();
-    // 0 domingo, 1 segunda, 2 terça, 3 quarta, 4 quinta, 5 sexta, 6 sábado
-
-    const indiceColuna = {
-        1: 1,
-        2: 2,
-        3: 3,
-        4: 4,
-        5: 5,
-        6: 6
-    };
-
-    if (diaSemana !== 0) { 
-        const col = indiceColuna[diaSemana];
-
+    if (dia !== 0) {
+        const col = map[dia];
         document.querySelectorAll("table tr").forEach(row => {
-            const celula = row.children[col];
-            if (celula)
-                celula.classList.add("dia-atual");
+            if (row.children[col])
+                row.children[col].classList.add("dia-atual");
         });
     }
 
+    /* Relógio gráfico */
+    function atualizarRelogio() {
+        const total = checkboxes.length;
+        const marcados = Array.from(checkboxes).filter(c => c.checked).length;
+
+        const pct = Math.round((marcados / total) * 100);
+
+        document.querySelector(".progress-text").textContent = pct + "%";
+
+        const circ = 2 * Math.PI * 35;
+        const offset = circ - (pct / 100) * circ;
+
+        document.querySelector(".progress-ring-progress").style.strokeDashoffset = offset;
+
+        if (pct === 100) iniciarFogos();
+    }
+
+    atualizarRelogio();
 });
 </script>
 
