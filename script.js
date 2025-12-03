@@ -1,5 +1,5 @@
 /* ============================== */
-/* Fogos de Artifício 🎆          */
+/* Fogos 🎆                       */
 /* ============================== */
 function iniciarFogos() {
     const canvas = document.getElementById("fireworksCanvas");
@@ -11,9 +11,7 @@ function iniciarFogos() {
 
     let particles = [];
 
-    function random(min, max) {
-        return Math.random() * (max - min) + min;
-    }
+    function random(min, max) { return Math.random() * (max - min) + min; }
 
     function createFirework() {
         const x = random(100, window.innerWidth - 100);
@@ -21,8 +19,7 @@ function iniciarFogos() {
 
         for (let i = 0; i < 60; i++) {
             particles.push({
-                x,
-                y,
+                x, y,
                 angle: random(0, Math.PI * 2),
                 speed: random(2, 6),
                 radius: 2,
@@ -50,11 +47,8 @@ function iniciarFogos() {
 
         if (Math.random() < 0.05) createFirework();
 
-        if (particles.length > 0) {
-            requestAnimationFrame(loop);
-        } else {
-            canvas.style.display = "none";
-        }
+        if (particles.length > 0) requestAnimationFrame(loop);
+        else canvas.style.display = "none";
     }
 
     createFirework();
@@ -62,9 +56,74 @@ function iniciarFogos() {
 }
 
 /* ============================== */
+/* Bloquear tudo exceto o dia atual */
+/* ============================== */
+function bloquearDiasExcetoHoje() {
+    const dia = new Date().getDay(); // 1-seg ... 6-sab
+
+    const col = {1:1,2:2,3:3,4:4,5:5,6:6}[dia];
+
+    if (!col) return; // domingo → nada liberado
+
+    document.querySelectorAll("table tr").forEach(row => {
+        Array.from(row.children).forEach((cel, index) => {
+            const chk = cel.querySelector("input[type='checkbox']");
+            if (chk && index !== col) {
+                chk.disabled = true;
+                chk.classList.add("bloqueado");
+            }
+        });
+    });
+}
+
+/* ============================== */
+/* Progresso do dia atual         */
+/* ============================== */
+function calcularProgressoDiaAtual() {
+    const dia = new Date().getDay();
+    const col = {1:1,2:2,3:3,4:4,5:5,6:6}[dia];
+
+    if (!col) return 0;
+
+    const linhas = document.querySelectorAll("tbody tr");
+
+    let total = 0;
+    let marcados = 0;
+
+    linhas.forEach(row => {
+        const cel = row.children[col];
+        const chk = cel.querySelector("input[type='checkbox']");
+        if (chk) {
+            total++;
+            if (chk.checked) marcados++;
+        }
+    });
+
+    return Math.round((marcados / total) * 100);
+}
+
+/* ============================== */
+/* Atualiza o relógio             */
+/* ============================== */
+function atualizarRelogio() {
+    const pct = calcularProgressoDiaAtual();
+
+    document.querySelector(".progress-text").textContent = pct + "%";
+
+    const circ = 2 * Math.PI * 35;
+    const offset = circ - (pct / 100) * circ;
+
+    document.querySelector(".progress-ring-progress").style.strokeDashoffset = offset;
+
+    if (pct === 100) iniciarFogos();
+}
+
+/* ============================== */
 /* Principal                      */
 /* ============================== */
 document.addEventListener("DOMContentLoaded", () => {
+
+    bloquearDiasExcetoHoje();
 
     const checkboxes = document.querySelectorAll(".checkbox");
 
@@ -80,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    /* Data atual */
+    /* Data no título */
     const hoje = new Date();
     const d = String(hoje.getDate()).padStart(2, "0");
     const m = String(hoje.getMonth() + 1).padStart(2, "0");
@@ -89,33 +148,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".subtitle").textContent =
         `Semana de ${d}/${m}/${a}`;
 
-    /* Destacar dia da semana */
-    const dia = hoje.getDay();
-    const map = {1:1,2:2,3:3,4:4,5:5,6:6};
-
-    if (dia !== 0) {
-        const col = map[dia];
+    /* Dia atual destacado */
+    const col = {1:1,2:2,3:3,4:4,5:5,6:6}[hoje.getDay()];
+    if (col) {
         document.querySelectorAll("table tr").forEach(row => {
             if (row.children[col])
                 row.children[col].classList.add("dia-atual");
         });
-    }
-
-    /* Relógio gráfico */
-    function atualizarRelogio() {
-        const total = checkboxes.length;
-        const marcados = Array.from(checkboxes).filter(c => c.checked).length;
-
-        const pct = Math.round((marcados / total) * 100);
-
-        document.querySelector(".progress-text").textContent = pct + "%";
-
-        const circ = 2 * Math.PI * 35;
-        const offset = circ - (pct / 100) * circ;
-
-        document.querySelector(".progress-ring-progress").style.strokeDashoffset = offset;
-
-        if (pct === 100) iniciarFogos();
     }
 
     atualizarRelogio();
