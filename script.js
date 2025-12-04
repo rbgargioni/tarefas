@@ -11,13 +11,29 @@ function iniciarFogos() {
 
     let particles = [];
 
-    // 🔊 SOM DOS FOGOS
-    function tocarSomFogos() {
-        const audio = document.getElementById("fireworkSound");
-        if (!audio) return;
+/* ============================== */
+/* Som dos Fogos – tocar 1 vez   */
+/* ============================== */
+
+let fogoSomTocado = false;
+
+function tocarSomFogos() {
+    if (fogoSomTocado) return; // já tocou → não toca mais
+
+    const audio = document.getElementById("fireworkSound");
+    if (!audio) return;
+
+    fogoSomTocado = true; // não toca novamente
+
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+
+    // ⏳ PARA O SOM APÓS 5 SEGUNDOS
+    setTimeout(() => {
+        audio.pause();
         audio.currentTime = 0;
-        audio.play().catch(() => {}); 
-    }
+    }, 5000);
+}
 
     function random(min, max) { return Math.random() * (max - min) + min; }
 
