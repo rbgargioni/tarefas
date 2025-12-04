@@ -196,6 +196,7 @@ thead .dia-atual {
     th, td { padding: 10px; font-size: 0.95em; }
     .task-icon { font-size: 2em; }
     .checkbox { width: 24px; height: 24px; }
+    .progress-text { top: 75%;left: 70%;}
 }
 
 /* iPad vertical (820px) */
