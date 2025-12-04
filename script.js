@@ -2,6 +2,7 @@
 /* Fogos 🎆                       */
 /* ============================== */
 function iniciarFogos() {
+    mostrarParabens();
     const canvas = document.getElementById("fireworksCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -18,12 +19,14 @@ function iniciarFogos() {
 let fogoSomTocado = false;
 
 function tocarSomFogos() {
-    if (fogoSomTocado) return; // já tocou → não toca mais
-
+    
     const audio = document.getElementById("fireworkSound");
     if (!audio) return;
 
-    fogoSomTocado = true; // não toca novamente
+    // 🔒 Se já tocou uma vez, nunca mais toca
+    if (fogoSomTocado) return;
+
+    fogoSomTocado = true; // Marca que já tocou
 
     audio.currentTime = 0;
     audio.play().catch(() => {});
@@ -37,25 +40,23 @@ function tocarSomFogos() {
 
     function random(min, max) { return Math.random() * (max - min) + min; }
 
-    function createFirework() {
+function createFirework() {
+    tocarSomFogos();  // 🔊 Só toca no primeiro fogo
 
-        // 🔊 TOCA O SOM TODA VEZ QUE UM FOGO NOVO É CRIADO
-        tocarSomFogos();
+    const x = random(100, window.innerWidth - 100);
+    const y = random(50, window.innerHeight / 2);
 
-        const x = random(100, window.innerWidth - 100);
-        const y = random(50, window.innerHeight / 2);
-
-        for (let i = 0; i < 60; i++) {
-            particles.push({
-                x, y,
-                angle: random(0, Math.PI * 2),
-                speed: random(2, 6),
-                radius: 2,
-                life: 60,
-                color: `hsl(${random(0, 360)}, 100%, 60%)`
-            });
-        }
+    for (let i = 0; i < 60; i++) {
+        particles.push({
+            x, y,
+            angle: random(0, Math.PI * 2),
+            speed: random(2, 6),
+            radius: 2,
+            life: 60,
+            color: `hsl(${random(0, 360)}, 100%, 60%)`
+        });
     }
+}
 
     function loop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -198,4 +199,17 @@ function tocarSomClick() {
     if (!audio) return;
     audio.currentTime = 0;
     audio.play().catch(() => {});
+}
+
+document.getElementById("box").addEventListener("click", function () {
+    this.classList.toggle("active");
+});
+function mostrarParabens() {
+    const texto = document.getElementById("parabensTexto");
+    texto.style.display = "block";
+
+    // Esconde depois de 5 segundos (se quiser remover, apague)
+    setTimeout(() => {
+        texto.style.display = "none";
+    }, 5000);
 }
