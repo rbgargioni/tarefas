@@ -11,9 +11,21 @@ function iniciarFogos() {
 
     let particles = [];
 
+    // 🔊 SOM DOS FOGOS
+    function tocarSomFogos() {
+        const audio = document.getElementById("fireworkSound");
+        if (!audio) return;
+        audio.currentTime = 0;
+        audio.play().catch(() => {}); 
+    }
+
     function random(min, max) { return Math.random() * (max - min) + min; }
 
     function createFirework() {
+
+        // 🔊 TOCA O SOM TODA VEZ QUE UM FOGO NOVO É CRIADO
+        tocarSomFogos();
+
         const x = random(100, window.innerWidth - 100);
         const y = random(50, window.innerHeight / 2);
 
