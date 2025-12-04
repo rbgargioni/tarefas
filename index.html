@@ -10,7 +10,6 @@
 <body>
 
 <canvas id="fireworksCanvas"></canvas>
-<audio id="fireworkSound" src="firework.mp3" preload="auto"></audio>
 
 <div class="container">
 
@@ -20,14 +19,6 @@
 
             <div class="progress-ring">
                 <svg width="90" height="90">
-                    <defs>
-                      <linearGradient id="gradiente" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#6a89cc"/>
-                        <stop offset="50%" stop-color="#38ada9"/>
-                        <stop offset="100%" stop-color="#78e08f"/>
-                      </linearGradient>
-                    </defs>
-
                     <circle class="progress-ring-bg" cx="45" cy="45" r="35"/>
                     <circle class="progress-ring-progress" cx="45" cy="45" r="35"/>
                 </svg>
@@ -38,7 +29,6 @@
         <p class="subtitle">Semana de ______</p>
     </div>
 
-    <div class="table-wrapper">
     <table>
         <thead>
             <tr>
@@ -145,7 +135,6 @@
 
         </tbody>
     </table>
-    </div>
 
     <div class="buttons">
         <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
@@ -157,6 +146,9 @@
     </div>
 
 </div>
+
+<!-- 🔊 SOM DOS FOGOS AQUI -->
+<audio id="fireworkSound" src="\fireworks.mp3" preload="auto"></audio>
 
 <script src="script.js"></script>
 
