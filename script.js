@@ -147,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         cb.addEventListener("change", () => {
             localStorage.setItem(cb.id, cb.checked);
+            tocarSomClick();   // 🔊 SOM DO CLICK
             atualizarRelogio();
         });
     });
@@ -171,3 +172,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     atualizarRelogio();
 });
+
+
+/* ============================== */
+/* Som do Click 🎵               */
+/* ============================== */
+function tocarSomClick() {
+    const audio = document.getElementById("clickSound");
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+}
