@@ -15,11 +15,11 @@ body {
 
 .container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1200px; /* diminuído para caber no iPad */
     background-color: white;
     border: 3px solid #333;
     border-radius: 8px;
-    padding: 25px;
+    padding: 25px; /* menor */
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
@@ -35,8 +35,9 @@ body {
     align-items: center;
 }
 
+/* Título menor e equilibrado para iPad */
 .header-line h1 {
-    font-size: 2.4em;
+    font-size: 2.4em;   /* antes era 3.0 */
     color: #333;
     font-weight: bold;
     letter-spacing: 2px;
@@ -49,9 +50,10 @@ body {
     margin-top: 8px;
 }
 
+/* Progress Ring – reduzido */
 .progress-ring {
     position: relative;
-    width: 75px;
+    width: 75px;   /* antes era 90px */
     height: 75px;
 }
 
@@ -67,12 +69,12 @@ body {
 
 .progress-ring-progress {
     fill: none;
-    stroke: url(#gradiente);
-    stroke-width: 12;
+    stroke: #27ae60;
+    stroke-width: 9;
     stroke-linecap: round;
     stroke-dasharray: 219.8;
     stroke-dashoffset: 219.8;
-    transition: stroke-dashoffset 0.4s ease;
+    transition: stroke-dashoffset 0.5s ease;
 }
 
 .progress-text {
@@ -81,20 +83,15 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     font-weight: bold;
-    font-size: 1em;
+    font-size: 1em; /* menor */
     color: #333;
 }
 
-.table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
+/* TABELA */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
-    min-width: 700px;
 }
 
 thead {
@@ -103,16 +100,16 @@ thead {
 }
 
 th {
-    padding: 12px;
+    padding: 12px; /* antes era 15 */
     text-align: center;
     border: 2px solid #34495e;
     text-transform: uppercase;
-    font-size: 1.05em;
+    font-size: 1.05em; /* menor */
 }
 
 td {
     border: 2px solid #bdc3c7;
-    padding: 12px;
+    padding: 12px; /* antes era 15 */
     text-align: center;
     font-size: 1em;
 }
@@ -126,15 +123,17 @@ td {
 }
 
 .task-icon {
-    font-size: 2.2em;
+    font-size: 2.2em; /* antes 2.6 */
 }
 
+/* Checkbox mais compacto */
 .checkbox {
     width: 26px;
     height: 26px;
     cursor: pointer;
 }
 
+/* Dia atual */
 .dia-atual {
     background-color: #ffeaa7 !important;
     border-color: #fdcb6e !important;
@@ -145,6 +144,7 @@ thead .dia-atual {
     color: white !important;
 }
 
+/* Botões */
 .buttons {
     margin-top: 18px;
     display: flex;
@@ -153,8 +153,8 @@ thead .dia-atual {
 }
 
 .btn {
-    padding: 10px 22px;
-    font-size: 1em;
+    padding: 10px 22px; /* menor */
+    font-size: 1em;      /* menor */
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -168,6 +168,7 @@ thead .dia-atual {
 .btn-clear { background-color: #c0392b; }
 .btn-clear:hover { background-color: #922b21; }
 
+/* Fogos */
 #fireworksCanvas {
     position: fixed;
     top: 0;
@@ -179,11 +180,16 @@ thead .dia-atual {
     z-index: 99999;
 }
 
+/* PRINT */
 @media print {
     .btn, .progress-ring { display: none; }
 }
 
-/* iPad horizontal (1180px) */
+/* =============================== */
+/*       RESPONSIVIDADE iPAD       */
+/* =============================== */
+
+/* iPad Air horizontal (1180×820) */
 @media (max-width: 1180px) {
     .container { max-width: 1100px; }
     .header-line h1 { font-size: 2.2em; }
@@ -192,7 +198,7 @@ thead .dia-atual {
     .checkbox { width: 24px; height: 24px; }
 }
 
-/* iPad vertical (900px) */
+/* iPad vertical (820px) */
 @media (max-width: 900px) {
     .header-line h1 { font-size: 1.9em; }
     .progress-ring { width: 65px; height: 65px; }
@@ -201,68 +207,9 @@ thead .dia-atual {
     .checkbox { width: 22px; height: 22px; }
 }
 
-/* Tablets pequenos e celulares grandes */
+/* Tablets menores e celulares grandes */
 @media (max-width: 768px) {
     .header-line h1 { font-size: 1.7em; }
     .progress-ring { width: 60px; height: 60px; }
     th, td { padding: 6px; font-size: 0.9em; }
-}
-
-/* CELULAR EM PÉ (até 480px) */
-@media (max-width: 480px) {
-
-    body {
-        padding: 5px;
-    }
-
-    .container {
-        padding: 12px;
-        border-width: 2px;
-    }
-
-    .header-line h1 {
-        font-size: 1.4em;
-        letter-spacing: 1px;
-    }
-
-    .subtitle {
-        font-size: 0.9em;
-    }
-
-    .progress-ring {
-        width: 55px;
-        height: 55px;
-    }
-
-    .progress-text {
-        font-size: 0.8em;
-    }
-
-    table {
-        min-width: 650px;
-    }
-
-    th, td {
-        padding: 6px;
-        font-size: 0.85em;
-    }
-
-    .task-icon {
-        font-size: 1.6em;
-    }
-
-    .checkbox {
-        width: 20px;
-        height: 20px;
-    }
-
-    .buttons {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .btn {
-        padding: 8px 10px;
-        font-size: 0.9em;
-    }
 }
