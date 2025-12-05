@@ -82,6 +82,16 @@ const perguntas = [
 let indicePerguntaAtual = 0;
 
 // ==============================
+// SOM DE ERRO (NOVO)
+// ==============================
+function tocarSomErro() {
+    const audio = document.getElementById("errorSound");
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+}
+
+// ==============================
 // Fogos 🎆 (igual)
 // ==============================
 function iniciarFogos() {
@@ -212,7 +222,7 @@ function mostrarModalErro() {
 }
 
 // ==============================
-// MODAL COM OPCOES MULTIPLA ESCOLHA
+// MODAL COM OPCOES MULTIPLA ESCOLHA (MODIFICADO: + som de erro)
 // ==============================
 function mostrarModalPergunta(callbackCheckbox) {
     const modal = document.getElementById("modalPergunta");
@@ -264,7 +274,8 @@ function mostrarModalPergunta(callbackCheckbox) {
                 tocarSomClick();
                 atualizarRelogio();
             } else {
-                // ❌ ERRADO
+                // ❌ ERRADO + SOM DE ERRO!
+                tocarSomErro();  // ← NOVO!
                 mostrarModalErro();
                 callbackCheckbox.checked = false;
             }
@@ -284,6 +295,9 @@ function tocarSomClick() {
     audio.play().catch(() => {});
 }
 
+// ==============================
+// PRINCIPAL (mantido exatamente como você quer)
+// ==============================
 document.addEventListener("DOMContentLoaded", () => {
     bloquearDiasExcetoHoje();
     
@@ -319,4 +333,76 @@ function mostrarParabens() {
     const texto = document.getElementById("parabensTexto");
     texto.style.display = "block";
     setTimeout(() => { texto.style.display = "none"; }, 5000);
+}
+
+// ==============================
+// LIMPAR DIA ATUAL (COM MODAL INFANTIL)
+// ==============================
+function limparDiaAtual() {
+    // Cria modal de confirmação
+    const modalConfirm = document.createElement("div");
+    modalConfirm.id = "modalConfirmar";
+    modalConfirm.className = "modal-confirmar";
+    modalConfirm.innerHTML = `
+        <div class="modal-confirm-conteudo">
+            <div class="modal-confirm-emoji">🗑️</div>
+            <div class="modal-confirm-texto">Limpar o Dia?</div>
+            <div class="modal-confirm-subtexto">Todas as tarefas de HOJE serão apagadas!</div>
+            <div class="modal-confirm-botoes">
+                <button class="btn-confirm-sim">✅ Sim, Limpar!</button>
+                <button class="btn-confirm-nao">❌ Cancelar</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modalConfirm);
+    
+    // Sim - limpa o dia
+    modalConfirm.querySelector(".btn-confirm-sim").onclick = () => {
+        const dia = new Date().getDay();
+        const col = {1:1,2:2,3:3,4:4,5:5,6:6}[dia];
+        if (!col) return;
+        
+        document.querySelectorAll("tbody tr").forEach(row => {
+            const cel = row.children[col];
+            const chk = cel.querySelector("input[type='checkbox']");
+            if (chk) {
+                chk.checked = false;
+                localStorage.setItem(chk.id, "false");
+            }
+        });
+        
+        atualizarRelogio();
+        modalConfirm.remove();
+        
+        // Mostra modal de sucesso
+        setTimeout(() => mostrarModalSucesso(), 200);
+    };
+    
+    // Não - fecha modal
+    modalConfirm.querySelector(".btn-confirm-nao").onclick = () => {
+        modalConfirm.remove();
+    };
+    
+    // Fecha com ESC
+    document.onkeydown = (e) => {
+        if (e.key === "Escape") modalConfirm.remove();
+    };
+}
+
+function mostrarModalSucesso() {
+    const modalSucesso = document.createElement("div");
+    modalSucesso.id = "modalSucesso";
+    modalSucesso.className = "modal-sucesso";
+    modalSucesso.innerHTML = `
+        <div class="modal-sucesso-conteudo">
+            <div class="modal-sucesso-emoji">✅</div>
+            <div class="modal-sucesso-texto">Dia Limpinho!</div>
+            <div class="modal-sucesso-subtexto">Pronto para começar de novo! ✨</div>
+        </div>
+    `;
+    document.body.appendChild(modalSucesso);
+    
+    setTimeout(() => {
+        if (modalSucesso.parentNode) modalSucesso.remove();
+    }, 2500);
 }
