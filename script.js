@@ -229,9 +229,9 @@ function mostrarModalPergunta(callbackCheckbox) {
     const textoPergunta = document.getElementById("modalPerguntaTexto");
     const containerOpcoes = document.getElementById("modalOpcoes");
     
-    const pergunta = perguntas[indicePerguntaAtual];
-    textoPergunta.textContent = pergunta.pergunta;
-    indicePerguntaAtual = (indicePerguntaAtual + 1) % perguntas.length;
+    indicePerguntaAtual = Math.floor(Math.random() * perguntas.length);
+const pergunta = perguntas[indicePerguntaAtual];
+textoPergunta.textContent = pergunta.pergunta;
     
     // Embaralha opções (correta sempre em posição aleatória)
     const opcoesEmbaralhadas = [...pergunta.opcoes].sort(() => Math.random() - 0.5);
