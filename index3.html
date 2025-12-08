@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadro de Tarefas - Avançado</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="fireworksCanvas"></canvas>
+
+    <!-- MODAL DAS PERGUNTAS -->
+    <div id="modalPergunta" class="modal-pergunta">
+        <div class="modal-conteudo">
+            <div class="modal-pergunta-texto" id="modalPerguntaTexto"></div>
+            <div class="modal-opcoes" id="modalOpcoes"></div>
+            <div class="modal-botoes">
+            <button id="modalBtnCancelar" class="btn-modal cancelar">❌ Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal erro -->
+    <div id="modalErroTemplate" style="display: none;"></div>
+
+<div class="container">
+    <div class="header">
+        <div class="header-line">
+            <h1>QUADRO DE TAREFAS</h1>
+            <div class="progress-ring">
+                <svg width="90" height="90">
+                    <circle class="progress-ring-bg" cx="45" cy="45" r="35"/>
+                    <circle class="progress-ring-progress" cx="45" cy="45" r="35"/>
+                </svg>
+                <div class="progress-text">0%</div>
+            </div>
+        </div>
+        <p class="subtitle">Semana de ______</p>
+    </div>
+        
+    <div id="parabensTexto">PARABÉNS!! 🎉</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>TAREFAS</th>
+                <th>SEGUNDA</th>
+                <th>TERÇA</th>
+                <th>QUARTA</th>
+                <th>QUINTA</th>
+                <th>SEXTA</th>
+                <th>SÁBADO</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyTarefas">
+            <!-- AS TAREFAS VIRÃO AUTOMATICAMENTE DO LOCALSTORAGE -->
+        </tbody>
+    </table>
+
+    <div class="buttons">
+        <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
+
+        <button class="btn btn-clear" 
+                onclick="if(confirm('Deseja limpar todos os checks?')){ localStorage.clear(); location.reload(); }">
+            🔄 Limpar Semana
+        </button>
+
+        <button class="btn btn-clear-day" onclick="limparDiaAtual()">🗑️ Limpar Dia</button>
+
+        <button class="btn btn-clear-idade" onclick="resetarIdade()">❗ Errei minha idade</button>
+        <a href="admin.html" class="btn btn-clear-idade">⚙️ Administrar Tarefas</a>
+    </div>
+</div>
+
+<audio id="fireworkSound" src="fireworks2.mp3" preload="auto"></audio>
+<audio id="clickSound" src="click.mp3" preload="auto"></audio>
+<audio id="errorSound" src="erro.mp3" preload="auto"></audio>
+
+<script src="js2.js"></script>
+
+<script>
+/* --------------------------------------
+   CARREGAR TAREFAS DO LOCALSTORAGE
+---------------------------------------*/
+function carregarTarefasDinamicamente() {
+    const tbody = document.getElementById("tbodyTarefas");
+
+    let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
+
+    // Caso não haja tarefas, exibe uma linha avisando
+    if (tarefas.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7">Nenhuma tarefa cadastrada no admin.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = ""; // limpa tabela
+
+    tarefas.forEach(tarefa => {
+        let tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td class="task-cell">
+                <div class="task-icon">⭐</div> ${tarefa}
+            </td>
+            <td><input type="checkbox" class="checkbox"></td>
+            <td><input type="checkbox" class="checkbox"></td>
+            <td><input type="checkbox" class="checkbox"></td>
+            <td><input type="checkbox" class="checkbox"></td>
+            <td><input type="checkbox" class="checkbox"></td>
+            <td><input type="checkbox" class="checkbox"></td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+}
+
+// Executa ao carregar a página
+carregarTarefasDinamicamente();
+</script>
+
+</body>
+</html>

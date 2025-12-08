@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Tarefas</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2a6ad3;
+        }
+
+        #container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 6px;
+        }
+
+        #novaTarefa {
+            width: 70%;
+            border: 1px solid #999;
+        }
+
+        #btnAdd {
+            width: 25%;
+            background: #2a6ad3;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #btnAdd:hover {
+            background: #1c4da3;
+        }
+
+        ul {
+            margin-top: 20px;
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            background: #e9f0ff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .acoes button {
+            margin-left: 5px;
+            padding: 6px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .editar {
+            background: #f0ad4e;
+            color: white;
+        }
+
+        .apagar {
+            background: #d9534f;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<a href="index3.html" class="btn btn-clear-idade">⬅️ Página Editável</a>
+    <div id="container">
+        <h1>Administração de Tarefas</h1>
+
+        <input id="novaTarefa" placeholder="Descrição da tarefa">
+        <button id="btnAdd">Adicionar</button>
+
+        <ul id="listaTarefas"></ul>
+    </div>
+
+<script>
+    // Carregar tarefas do localStorage
+    let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
+
+    // Salvar ordenado (A → Z)
+    function salvar() {
+        tarefas.sort(); 
+        localStorage.setItem("tarefas", JSON.stringify(tarefas));
+    }
+
+    // Renderizar lista
+    function render() {
+        const lista = document.getElementById("listaTarefas");
+        lista.innerHTML = "";
+
+        tarefas.forEach((tarefa, index) => {
+            const li = document.createElement("li");
+
+            li.innerHTML = `
+                <span>${tarefa}</span>
+                <div class="acoes">
+                    <button class="editar" onclick="editar(${index})">Editar</button>
+                    <button class="apagar" onclick="apagar(${index})">Apagar</button>
+                </div>
+            `;
+
+            lista.appendChild(li);
+        });
+    }
+
+    // Adicionar tarefa
+    function adicionar() {
+        const campo = document.getElementById("novaTarefa");
+        const texto = campo.value.trim();
+
+        if (texto === "") return;
+
+        // Impede repetição
+        if (tarefas.includes(texto)) {
+            alert("Essa tarefa já existe!");
+            return;
+        }
+
+        tarefas.push(texto);
+        salvar();
+        render();
+        campo.value = "";
+    }
+
+    // Apagar tarefa
+    function apagar(i) {
+        tarefas.splice(i, 1);
+        salvar();
+        render();
+    }
+
+    // Editar tarefa
+    function editar(i) {
+        const novo = prompt("Editar tarefa:", tarefas[i]);
+        if (novo !== null && novo.trim() !== "") {
+            if (tarefas.includes(novo.trim())) {
+                alert("Essa tarefa já existe!");
+                return;
+            }
+            tarefas[i] = novo.trim();
+            salvar();
+            render();
+        }
+    }
+
+    // Ativa botão adicionar
+    document.getElementById("btnAdd").onclick = adicionar;
+
+    // Render inicial
+    render();
+</script>
+
+</body>
+</html>

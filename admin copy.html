@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Tarefas</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        input, button { padding: 10px; margin: 5px 0; }
+        #lista li { margin: 5px 0; }
+        .del { color: red; cursor: pointer; margin-left: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2>Painel Admin</h2>
+
+    <label>Adicionar tarefa:</label><br>
+    <input type="text" id="novaTarefa" placeholder="Digite uma tarefa">
+    <button onclick="adicionar()">Adicionar</button>
+
+    <h3>Tarefas cadastradas:</h3>
+    <ul id="lista"></ul>
+
+    <button onclick="salvar()" style="padding: 12px; background: green; color: white;">
+        SALVAR TAREFAS
+    </button>
+
+<script>
+    let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
+
+    function atualizarLista() {
+        const ul = document.getElementById("lista");
+        ul.innerHTML = "";
+
+        tarefas.forEach((t, i) => {
+            let li = document.createElement("li");
+            li.innerHTML = `${t} <span class="del" onclick="excluir(${i})">[x]</span>`;
+            ul.appendChild(li);
+        });
+    }
+
+    function adicionar() {
+        const campo = document.getElementById("novaTarefa");
+        if (campo.value.trim() === "") return;
+
+        tarefas.push(campo.value.trim());
+        campo.value = "";
+        atualizarLista();
+    }
+
+    function excluir(i) {
+        tarefas.splice(i, 1);
+        atualizarLista();
+    }
+
+    function salvar() {
+        tarefas.sort();
+        localStorage.setItem("tarefas", JSON.stringify(tarefas));
+        alert("Tarefas salvas com sucesso!");
+    }
+
+    atualizarLista();
+</script>
+
+</body>
+</html>
