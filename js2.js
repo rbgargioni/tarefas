@@ -3,82 +3,81 @@
 // ==============================
 const perguntas = [
     {
-        pergunta: "Quantos dedos tem uma mão? 🤚",
-        correta: "5",
-        opcoes: ["3", "5", "10"]
+        pergunta: "Quanto é 8 × 7 ?",
+        correta: "56",
+        opcoes: ["42", "48", "56"]
     },
     {
-        pergunta: "Qual é a cor do céu? ☁️",
-        correta: "azul",
-        opcoes: ["verde", "azul", "amarelo"]
+        pergunta: "Qual é o maior planeta do Sistema Solar? 🪐",
+        correta: "Júpiter",
+        opcoes: ["Terra", "Marte", "Júpiter"]
     },
     {
-        pergunta: "Quantas pernas tem uma mesa? 🪑",
-        correta: "4",
-        opcoes: ["2", "3", "4"]
+        pergunta: "Qual é a capital do Brasil? 🇧🇷",
+        correta: "Brasília",
+        opcoes: ["Rio de Janeiro", "Brasília", "São Paulo"]
     },
     {
-        pergunta: "Qual é o primeiro dia da semana?",
-        correta: "segunda",
-        opcoes: ["sexta", "segunda", "domingo"]
+        pergunta: "Quantos segundos tem um minuto?",
+        correta: "60",
+        opcoes: ["30", "45", "60"]
     },
     {
-        pergunta: "Quantas rodas tem uma bicicleta? 🚲",
-        correta: "2",
-        opcoes: ["2", "4", "6"]
+        pergunta: "Qual é o resultado de 45 - 18?",
+        correta: "27",
+        opcoes: ["20", "27", "33"]
     },
     {
-        pergunta: "O que é vermelho e tem sementes? 🍓",
-        correta: "morango",
-        opcoes: ["banana", "morango", "uva"]
+        pergunta: "Quem escreveu ‘Dom Casmurro’? 📚",
+        correta: "Machado de Assis",
+        opcoes: ["Monteiro Lobato", "Machado de Assis", "José de Alencar"]
     },
     {
-        pergunta: "Quantos meses tem um ano? 📅",
-        correta: "12",
-        opcoes: ["10", "12", "15"]
+        pergunta: "Qual é o processo das plantas produzirem seu alimento? 🌱",
+        correta: "Fotossíntese",
+        opcoes: ["Respiração", "Digestão", "Fotossíntese"]
     },
     {
-        pergunta: "Qual animal faz au au? 🐶",
-        correta: "cachorro",
-        opcoes: ["gato", "cachorro", "coelho"]
+        pergunta: "Quantos lados tem um hexágono? 🔷",
+        correta: "6",
+        opcoes: ["5", "6", "8"]
     },
     {
-        pergunta: "Quantas cores tem o arco-íris? 🌈",
-        correta: "7",
-        opcoes: ["5", "7", "10"]
+        pergunta: "Qual desses é mamífero?",
+        correta: "Golfinho",
+        opcoes: ["Tubarão", "Golfinho", "Carpa"]
     },
     {
-        pergunta: "O que você faz com os dentes? 🦷",
-        correta: "escovar",
-        opcoes: ["comer", "escovar", "pintar"]
+        pergunta: "Qual é o oposto de 'aumentar'?",
+        correta: "diminuir",
+        opcoes: ["crescer", "diminuir", "somar"]
     },
     {
-        pergunta: "Onde dormimos? 🛏️",
-        correta: "cama",
-        opcoes: ["mesa", "cama", "carro"]
+        pergunta: "Quanto é 25% de 100?",
+        correta: "25",
+        opcoes: ["50", "25", "75"]
     },
     {
-        pergunta: "Quantas mãos você tem? ✋",
-        correta: "2",
-        opcoes: ["1", "2", "4"]
+        pergunta: "Qual gás os seres humanos precisam para respirar?",
+        correta: "Oxigênio",
+        opcoes: ["Hidrogênio", "Oxigênio", "Nitrogênio"]
     },
     {
-        pergunta: "Qual é o oposto de grande? 📏",
-        correta: "pequeno",
-        opcoes: ["grande", "pequeno", "médio"]
+        pergunta: "Qual é o continente do Egito? 🏺",
+        correta: "África",
+        opcoes: ["Ásia", "África", "Europa"]
     },
     {
-        pergunta: "O que bebemos da torneira? 🥤",
-        correta: "água",
-        opcoes: ["leite", "água", "suco"]
+        pergunta: "Qual é o maior órgão do corpo humano?",
+        correta: "A pele",
+        opcoes: ["Coração", "Fígado", "A pele"]
     },
     {
-        pergunta: "Quantos dias tem uma semana? 📆",
-        correta: "7",
-        opcoes: ["5", "6", "7"]
+        pergunta: "Quantos dias tem o mês de fevereiro em ano bissexto?",
+        correta: "29",
+        opcoes: ["28", "29", "30"]
     }
 ];
-
 let indicePerguntaAtual = 0;
 
 // ==============================

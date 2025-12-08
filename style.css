@@ -359,6 +359,13 @@ thead .dia-atual {
 .btn-clear-day:hover {
     background-color: #e67e22;
 }
+
+.btn-clear-idade {
+    background-color: rgb(230, 57, 34);
+}
+.btn-clear-idade:hover {
+    background-color: rgba(255, 31, 2, 0.527);
+}
 /* MODAL CONFIRMAR LIMPAR */
 .modal-confirmar {
     position: fixed;

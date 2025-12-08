@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quadro de Tarefas</title>
+    <title>Quadro de Tarefas - Avançado</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -31,8 +31,8 @@
     <!-- MODAL DE ERRO (mantida) -->
     <div id="modalErroTemplate" style="display: none;"></div>
 
-    <div class="container">
-        <div class="header">
+<div class="container">
+    <div class="header">
             <div class="header-line">
                 <h1>QUADRO DE TAREFAS</h1>
                 <div class="progress-ring">
@@ -44,13 +44,13 @@
                 </div>
             </div>
             <p class="subtitle">Semana de ______</p>
-        </div>
+    </div>
         
         <div id="parabensTexto">PARABÉNS!! 🎉</div>
 
-        <table>
-            <thead>
-                <tr>
+    <table>
+        <thead>
+            <tr>
                     <th>TAREFAS</th>
                     <th>SEGUNDA</th>
                     <th>TERÇA</th>
@@ -58,9 +58,9 @@
                     <th>QUINTA</th>
                     <th>SEXTA</th>
                     <th>SÁBADO</th>
-                </tr>
-            </thead>
-            <tbody>
+            </tr>
+        </thead>
+         <tbody>
                 <tr>
                     <td class="task-cell"><div class="task-icon">🥪</div>Tomar Café da Manhã</td>
                     <td><input type="checkbox" class="checkbox"></td>
@@ -161,44 +161,21 @@
                     <td><input type="checkbox" class="checkbox"></td>
                 </tr>
             </tbody>
-        </table>
+    </table>
 
-        <div class="buttons">
-    <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
+    <div class="buttons">
+        <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
     <button class="btn btn-clear" onclick="if(confirm('Deseja limpar todos os checks?')){localStorage.clear();location.reload();}">🔄 Limpar Semana</button>
     <!-- NOVO BOTÃO -->
     <button class="btn btn-clear-day" onclick="limparDiaAtual()">🗑️ Limpar Dia</button>
     <button class="btn btn-clear-idade" onclick="resetarIdade()">❗ Errei minha idade </button>
-</div>
     </div>
+</div>
 
-    <audio id="fireworkSound" src="fireworks2.mp3" preload="auto"></audio>
+<audio id="fireworkSound" src="fireworks2.mp3" preload="auto"></audio>
     <audio id="clickSound" src="click.mp3" preload="auto"></audio>
-    <audio id="errorSound" src="erro.mp3" preload="auto"></audio>
-    <script src="script.js"></script>
+    <audio id="errorSound" src="erro.mp3" preload="auto"></audio><script src="js2.js"></script>
+
+
 </body>
 </html>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-
-    // Se já salvou a idade antes, não pergunta novamente
-    let idade = localStorage.getItem("idadeCrianca");
-
-    if (!idade) {
-        idade = prompt("Quantos anos você tem?");
-        idade = parseInt(idade);
-
-        if (!idade || idade <= 0) {
-            alert("Idade inválida. Carregando versão simples.");
-            localStorage.setItem("idadeCrianca", 5);
-            return;
-        }
-
-        localStorage.setItem("idadeCrianca", idade);
-    }
-
-    if (idade > 6) {
-        window.location.href = "index2.html";
-    }
-});
-</script>

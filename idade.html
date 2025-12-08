@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleção de Idade</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .caixa {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+        input {
+            width: 80px;
+            font-size: 22px;
+            padding: 8px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            background: #0099cc;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="caixa">
+    <h2>Quantos anos você tem?</h2>
+
+    <input type="number" id="idadeInput" min="1" max="15" placeholder="Idade">
+
+    <br>
+    <button onclick="confirmarIdade()">Continuar</button>
+</div>
+
+<script>
+function confirmarIdade() {
+    const idade = parseInt(document.getElementById("idadeInput").value);
+
+    if (!idade) {
+        alert("Digite a idade!");
+        return;
+    }
+
+    // salva no navegador
+    localStorage.setItem("idadeCrianca", idade);
+
+    if (idade <= 6) {
+        window.location.href = "index.html";
+    } else {
+        window.location.href = "index2.html";
+    }
+}
+</script>
+
+</body>
+</html>
