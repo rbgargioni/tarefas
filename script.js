@@ -118,6 +118,12 @@ function tocarPensando() {
         audio.addEventListener("loadedmetadata", startAudio, { once: true });
     }
 }
+function pararPensando() {
+    const audio = document.getElementById("pensando");
+    if (!audio) return;
+    audio.pause();
+    audio.currentTime = 0; // voltar ao início caso queira
+}
 
 // ==============================
 // Fogos 🎆 (igual)
@@ -274,6 +280,7 @@ textoPergunta.textContent = pergunta.pergunta;
     // Adiciona eventos aos botões de opção
     document.querySelectorAll(".opcao-btn").forEach(btn => {
         btn.onclick = () => {
+            pararPensando(); // ← NOVO!
             const escolhida = btn.dataset.resposta;
             const correta = pergunta.correta;
             
