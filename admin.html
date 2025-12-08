@@ -1,111 +1,173 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Administrativo - Tarefas</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Administrativo - Tarefas</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 15px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
+    /* Botão voltar */
+    .btn-voltar {
+        display: inline-block;
+        margin-bottom: 15px;
+        padding: 10px 14px;
+        background: #ffffff;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #2a6ad3;
+        font-weight: bold;
+        box-shadow: 0 0 8px rgba(0,0,0,0.15);
+        transition: 0.2s;
+    }
+
+    .btn-voltar:hover {
+        background: #eef5ff;
+    }
+
+    #container {
+        width: 100%;
+        max-width: 500px;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 12px #ccc;
+    }
+
+    h1 {
+        text-align: center;
+        color: #2a6ad3;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    /* Inputs e botões */
+    #novaTarefa,
+    #btnAdd {
+        width: 100%;
+        font-size: 18px;
+        padding: 12px;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+    #novaTarefa {
+        border: 1px solid #aaa;
+    }
+
+    #btnAdd {
+        background: #2a6ad3;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    #btnAdd:hover {
+        background: #1c4da3;
+    }
+
+    /* Lista */
+    ul {
+        margin-top: 20px;
+        padding: 0;
+        list-style: none;
+    }
+
+
+    li {
+        background: #e9f0ff;
+        padding: 12px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        flex-wrap: wrap;
+        gap: 10px;
+        word-wrap: break-word;      /* permite quebra */
+    overflow-wrap: break-word;  /* permite quebra */
+    word-break: break-word;     /* força quebra se necessário */
+    }
+    li span {
+    flex: 1;
+    min-width: 0; /* evita o estouro */
+    }
+
+
+    .acoes {
+        display: flex;
+        gap: 8px;
+    }
+
+    .acoes button {
+        padding: 8px 12px;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+    .editar {
+        background: #f0ad4e;
+        color: white;
+    }
+
+    .apagar {
+        background: #d9534f;
+        color: white;
+    }
+
+    /* Responsividade extra */
+    @media (max-width: 400px) {
         h1 {
-            text-align: center;
-            color: #2a6ad3;
-        }
-
-        #container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px #ccc;
-        }
-
-        input, button {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 6px;
-        }
-
-        #novaTarefa {
-            width: 70%;
-            border: 1px solid #999;
-        }
-
-        #btnAdd {
-            width: 25%;
-            background: #2a6ad3;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        #btnAdd:hover {
-            background: #1c4da3;
-        }
-
-        ul {
-            margin-top: 20px;
-            padding: 0;
-            list-style: none;
+            font-size: 20px;
         }
 
         li {
-            background: #e9f0ff;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
-        .acoes button {
-            margin-left: 5px;
-            padding: 6px 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 6px;
+        .acoes {
+            width: 100%;
+            justify-content: flex-end;
         }
-
-        .editar {
-            background: #f0ad4e;
-            color: white;
-        }
-
-        .apagar {
-            background: #d9534f;
-            color: white;
-        }
-    </style>
+    }
+</style>
 </head>
+
 <body>
-<a href="index3.html" class="btn btn-clear-idade">⬅️ Página Editável</a>
-    <div id="container">
-        <h1>Administração de Tarefas</h1>
 
-        <input id="novaTarefa" placeholder="Descrição da tarefa">
-        <button id="btnAdd">Adicionar</button>
+<a href="index3.html" class="btn-voltar">⬅️ Página Editável</a>
 
-        <ul id="listaTarefas"></ul>
-    </div>
+<div id="container">
+    <h1>Administração de Tarefas</h1>
+
+    <input id="novaTarefa" placeholder="Descrição da tarefa">
+    <button id="btnAdd">Adicionar</button>
+
+    <ul id="listaTarefas"></ul>
+</div>
 
 <script>
-    // Carregar tarefas do localStorage
     let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
 
-    // Salvar ordenado (A → Z)
     function salvar() {
-        tarefas.sort(); 
+        tarefas.sort();
         localStorage.setItem("tarefas", JSON.stringify(tarefas));
     }
 
-    // Renderizar lista
     function render() {
         const lista = document.getElementById("listaTarefas");
         lista.innerHTML = "";
@@ -125,14 +187,12 @@
         });
     }
 
-    // Adicionar tarefa
     function adicionar() {
         const campo = document.getElementById("novaTarefa");
         const texto = campo.value.trim();
 
         if (texto === "") return;
 
-        // Impede repetição
         if (tarefas.includes(texto)) {
             alert("Essa tarefa já existe!");
             return;
@@ -144,14 +204,12 @@
         campo.value = "";
     }
 
-    // Apagar tarefa
     function apagar(i) {
         tarefas.splice(i, 1);
         salvar();
         render();
     }
 
-    // Editar tarefa
     function editar(i) {
         const novo = prompt("Editar tarefa:", tarefas[i]);
         if (novo !== null && novo.trim() !== "") {
@@ -165,10 +223,8 @@
         }
     }
 
-    // Ativa botão adicionar
     document.getElementById("btnAdd").onclick = adicionar;
 
-    // Render inicial
     render();
 </script>
 
