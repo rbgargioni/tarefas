@@ -90,6 +90,34 @@ function tocarSomErro() {
     audio.currentTime = 0;
     audio.play().catch(() => {});
 }
+// ==============================
+// SOM DE ERRO (NOVO)
+// ==============================
+function tocarPensando() {
+    const audio = document.getElementById("pensando");
+    if (!audio) return;
+
+    const inicio = 103; // 1:43
+    const fim = 125;    // 2:05
+
+    function startAudio() {
+        audio.currentTime = inicio;
+        audio.play().catch(() => {});
+
+        const interval = setInterval(() => {
+            if (audio.currentTime >= fim) {
+                audio.pause();      // para o áudio
+                clearInterval(interval); // remove o intervalo
+            }
+        }, 200);
+    }
+
+    if (audio.readyState >= 1) {
+        startAudio();
+    } else {
+        audio.addEventListener("loadedmetadata", startAudio, { once: true });
+    }
+}
 
 // ==============================
 // Fogos 🎆 (igual)
@@ -225,6 +253,7 @@ function mostrarModalErro() {
 // MODAL COM OPCOES MULTIPLA ESCOLHA (MODIFICADO: + som de erro)
 // ==============================
 function mostrarModalPergunta(callbackCheckbox) {
+    tocarPensando(); // ← NOVO!
     const modal = document.getElementById("modalPergunta");
     const textoPergunta = document.getElementById("modalPerguntaTexto");
     const containerOpcoes = document.getElementById("modalOpcoes");
