@@ -406,7 +406,26 @@ function mostrarModalSucesso() {
     }, 2500);
 }
 function resetarIdade() {
+    localStorage.clear();
     localStorage.removeItem("idadeCrianca");
-    alert("Idade apagada! Vamos perguntar novamente.");
-    window.location.href = "idade.html"; // volta para a página de idade
+    const modalErro = document.createElement("div");
+    modalErro.id = "modalErro";
+    modalErro.className = "modal-erro";
+    modalErro.innerHTML = `
+        <div class="modal-erro-conteudo">
+            <div class="modal-erro-emoji">💔</div>
+            <div class="modal-erro-texto">Quase! 😅</div>
+            <div class="modal-erro-subtexto">Clique para digitar sua idade!</div>
+            <button class="btn-erro-ok">✅ Tentar Novamente</button>
+        </div>
+    `;
+    document.body.appendChild(modalErro);
+    setTimeout(() => {
+        if (modalErro.parentNode) modalErro.remove();
+        window.location.href = "idade.html";
+    }, 3000);
+    
+    modalErro.querySelector(".btn-erro-ok").onclick = () => {
+        modalErro.remove();
+    };
 }
