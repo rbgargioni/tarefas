@@ -78,15 +78,6 @@
         .btn:hover {
             background: #007aa3;
         }
-
-        /* botão cinza estilo botão de fechar/cancelar das modais */
-        .btn-sec {
-            background: #666;
-        }
-        .btn-sec:hover {
-            background: #4c4c4c;
-        }
-
     </style>
 </head>
 <body>
@@ -98,51 +89,37 @@
 
     <div class="buttons">
         <button class="btn" onclick="confirmarIdade()">Continuar</button>
-        <button class="btn btn-sec" onclick="paginaEditavel()">📝 Página Editável</button>
     </div>
 </div>
 
 <script>
-function paginaEditavel() {
-    localStorage.setItem("idadeCrianca", 1000);   // salva idade especial
-    confirmarIdade(1000);                         // chama função com idade 1000
-}
-
+/* --------------------------------------
+   Verificar se já existe uma última página
+---------------------------------------*/
 document.addEventListener("DOMContentLoaded", function() {
     const ultimaPagina = localStorage.getItem("paginaEscolhida");
 
     if (ultimaPagina) {
-        // redireciona automaticamente para a página escolhida anteriormente
         window.location.href = ultimaPagina;
     }
 });
-function confirmarIdade(valorForcado = null) {
-    const idade = valorForcado !== null 
-        ? valorForcado 
-        : parseInt(document.getElementById("idadeInput").value);
+
+/* --------------------------------------
+   Confirmar idade e ir para a tela de escolha
+---------------------------------------*/
+function confirmarIdade() {
+    const idade = parseInt(document.getElementById("idadeInput").value);
 
     if (!idade) {
         alert("Digite a idade!");
         return;
     }
 
+    // Salva idade
     localStorage.setItem("idadeCrianca", idade);
 
-    // 🎯 CASO ESPECIAL → Página editável
-    if (idade === 1000) {
-        localStorage.setItem("paginaEscolhida", "index3.html");
-        window.location.href = "index3.html";
-        return;
-    }
-
-    // 🎯 Página normal
-    if (idade <= 6) {
-        localStorage.setItem("paginaEscolhida", "index1.html");
-        window.location.href = "index1.html";
-    } else {
-        localStorage.setItem("paginaEscolhida", "index2.html");
-        window.location.href = "index2.html";
-    }
+    // Vai para a tela de escolha
+    window.location.href = "escolha.html";
 }
 </script>
 
