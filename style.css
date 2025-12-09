@@ -147,13 +147,19 @@ thead .dia-atual {
 }
 
 .btn {
-    padding: 10px 22px;
-    font-size: 1em;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+display: inline-flex;
+    align-items: center;
+    gap: 8px;
+   
     color: white;
-    transition: 0.3s;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: 0.25s ease;
+    border: none;
 }
 
 .btn-print {
@@ -227,6 +233,35 @@ thead .dia-atual {
     flex-direction: column;
     gap: 15px;
     margin-bottom: 25px;
+}
+.btn-advanced {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #2a6ad3, #1c4da3);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: 0.25s ease;
+    border: none;
+}
+
+.btn-advanced:hover {
+    background: linear-gradient(135deg, #3578ed, #1c4da3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+.btn-warning2 {
+    background: linear-gradient(135deg, #d9534f, #b52e2b);
+}
+
+.btn-warning2:hover {
+    background: linear-gradient(135deg, #ff6b66, #b52e2b);
 }
 
 .opcao-btn {
