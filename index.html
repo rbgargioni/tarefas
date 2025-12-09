@@ -98,11 +98,15 @@
 
     <div class="buttons">
         <button class="btn" onclick="confirmarIdade()">Continuar</button>
-        <a href="index3.html" class="btn btn-sec">⚙️ Editar</a>
+        <button class="btn btn-sec" onclick="paginaEditavel()">📝 Página Editável</button>
     </div>
 </div>
 
 <script>
+function paginaEditavel() {
+    localStorage.setItem("idadeCrianca", 1000);   // salva idade especial
+    confirmarIdade(1000);                         // chama função com idade 1000
+}
 
 document.addEventListener("DOMContentLoaded", function() {
     const ultimaPagina = localStorage.getItem("paginaEscolhida");
@@ -112,8 +116,10 @@ document.addEventListener("DOMContentLoaded", function() {
         window.location.href = ultimaPagina;
     }
 });
-function confirmarIdade() {
-    const idade = parseInt(document.getElementById("idadeInput").value);
+function confirmarIdade(valorForcado = null) {
+    const idade = valorForcado !== null 
+        ? valorForcado 
+        : parseInt(document.getElementById("idadeInput").value);
 
     if (!idade) {
         alert("Digite a idade!");
@@ -122,14 +128,21 @@ function confirmarIdade() {
 
     localStorage.setItem("idadeCrianca", idade);
 
+    // 🎯 CASO ESPECIAL → Página editável
+    if (idade === 1000) {
+        localStorage.setItem("paginaEscolhida", "index3.html");
+        window.location.href = "index3.html";
+        return;
+    }
+
+    // 🎯 Página normal
     if (idade <= 6) {
-    localStorage.setItem("paginaEscolhida", "index1.html");
-    window.location.href = "index1.html";
-} else {
-    localStorage.setItem("paginaEscolhida", "index2.html");
-    window.location.href = "index2.html";
-}
-    
+        localStorage.setItem("paginaEscolhida", "index1.html");
+        window.location.href = "index1.html";
+    } else {
+        localStorage.setItem("paginaEscolhida", "index2.html");
+        window.location.href = "index2.html";
+    }
 }
 </script>
 
