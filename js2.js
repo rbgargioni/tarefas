@@ -457,7 +457,7 @@ function resetarIdade() {
     document.body.appendChild(modalErro);
     setTimeout(() => {
         if (modalErro.parentNode) modalErro.remove();
-        window.location.href = "idade.html";
+        window.location.href = "index.html";
     }, 3000);
     
     modalErro.querySelector(".btn-erro-ok").onclick = () => {

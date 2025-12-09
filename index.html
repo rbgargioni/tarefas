@@ -3,203 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quadro de Tarefas</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <canvas id="fireworksCanvas"></canvas>
-    
-    <!-- MODAL DAS PERGUNTAS (AGORA COM OPCÕES) -->
-    <div id="modalPergunta" class="modal-pergunta">
-        <div class="modal-conteudo">
-            <div class="modal-pergunta-texto" id="modalPerguntaTexto"></div>
-            <div class="modal-opcoes" id="modalOpcoes"></div>
-            <div class="modal-botoes">
-                <button id="modalBtnCancelar" class="btn-modal cancelar">❌ Cancelar</button>
-            </div>
-        </div>
-    </div>
-    <!-- Modal de Folga (Estilo Mensagem Padrão) 
-    <div id="modalFolga" class="mensagem-modal">
-        <div class="mensagem-caixa">
-            <h2 class="mensagem-titulo">Dia de Folga! 💤</h2>
-            <p class="mensagem-texto">Hoje não há tarefas para completar.</p>
-    
-            <button id="fecharFolga" class="mensagem-botao">OK</button>
-        </div>
-    </div>-->
-    <!-- MODAL DE ERRO (mantida) -->
-    <div id="modalErroTemplate" style="display: none;"></div>
+    <title>Idade</title>
 
-    <div class="container">
-        <div class="header">
-            <div class="header-line">
-                <h1>QUADRO DE TAREFAS</h1>
-                <div class="progress-ring">
-                    <svg width="90" height="90">
-                        <rcle class="progress-ring-bg" cx="45" cy="45" r="35"/>
-                        <rcle class="progress-ring-progress" cx="45" cy="45" r="35"/>
-                    </svg>
-                    <div class="progress-text">0%</div>
-                </div>
-            </div>
-            <p class="subtitle">Semana de ______</p>
-        </div>
-        
-        <div id="parabensTexto">PARABÉNS!! 🎉</div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>TAREFAS</th>
-                    <th>SEGUNDA</th>
-                    <th>TERÇA</th>
-                    <th>QUARTA</th>
-                    <th>QUINTA</th>
-                    <th>SEXTA</th>
-                    <th>SÁBADO</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="task-cell"><div class="task-icon">🥪</div>Tomar Café da Manhã</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td class="task-cell"><div class="task-icon">🦷</div>Escovar os Dentes</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td class="task-cell"><div class="task-icon">🚽</div>Banheiro</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td class="task-cell"><div class="task-icon">🥤</div>Beber Água</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td class="task-cell"><div class="task-icon">🧸</div>Guardar os Brinquedos</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td class="task-cell"><div class="task-icon">🛏️</div>Arrumar a Cama</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td class="task-cell"><div class="task-icon">📚</div>Fazer as Tarefas</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td class="task-cell"><div class="task-icon">🍽️</div>Comer Bem</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td class="task-cell"><div class="task-icon">🤐</div>Não Falar Palavrão</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td class="task-cell"><div class="task-icon">👕</div>Guardar as Roupas</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-                <tr>
-                    <td class="task-cell"><div class="task-icon">🚿</div>Tomar Banho</td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                    <td><input type="checkbox" class="checkbox"></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="buttons">
-    <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
-    <button class="btn btn-clear" onclick="if(confirm('Deseja limpar todos os checks?')){localStorage.clear();location.reload();}">🔄 Limpar Semana</button>
-    <!-- NOVO BOTÃO -->
-    <button class="btn btn-clear-day" onclick="limparDiaAtual()">🗑️ Limpar Dia</button>
-    <button class="btn btn-clear-idade" onclick="resetarIdade()">❗ Errei minha idade </button>
-</div>
-    </div>
-
-    <audio id="fireworkSound" src="fireworks2.mp3" preload="auto"></audio>
-    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
-    <audio id="errorSound" src="erro.mp3" preload="auto"></audio>
-    <audio id="pensando" src="super_mario_medley.mp3" preload="auto"></audio>
-    <script src="script.js"></script>
-</body>
-</html>
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-
-    // Se já salvou a idade antes, não pergunta novamente
-    let idade = localStorage.getItem("idadeCrianca");
-
-    if (!idade) {
-        idade = prompt("Quantos anos você tem?");
-        idade = parseInt(idade);
-
-        if (!idade || idade <= 0) {
-            alert("Idade inválida. Carregando versão simples.");
-            localStorage.setItem("idadeCrianca", 5);
-            return;
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: rgba(0,0,0,0.4); /* fundo igual modal */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        localStorage.setItem("idadeCrianca", idade);
+        .modal-box {
+            width: 330px;
+            background: #fff;
+            padding: 25px;
+            text-align: center;
+            border-radius: 16px;
+            box-shadow: 0px 6px 18px rgba(0,0,0,0.25);
+            animation: popup 0.25s ease-out;
+        }
+
+        @keyframes popup {
+            from { transform: scale(0.92); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        h2 {
+            margin: 0;
+            margin-bottom: 18px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 110px;
+            font-size: 22px;
+            padding: 8px;
+            text-align: center;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+            margin-bottom: 18px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #0099cc;
+            box-shadow: 0 0 5px rgba(0,153,204,0.5);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            background: #0099cc;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #007aa3;
+        }
+
+        /* botão cinza estilo botão de fechar/cancelar das modais */
+        .btn-sec {
+            background: #666;
+        }
+        .btn-sec:hover {
+            background: #4c4c4c;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="modal-box">
+    <h2>Quantos anos você tem?</h2>
+
+    <input type="number" id="idadeInput" min="1" max="15" placeholder="Idade">
+
+    <div class="buttons">
+        <button class="btn" onclick="confirmarIdade()">Continuar</button>
+        <a href="index3.html" class="btn btn-sec">⚙️ Editar</a>
+    </div>
+</div>
+
+<script>
+function confirmarIdade() {
+    const idade = parseInt(document.getElementById("idadeInput").value);
+
+    if (!idade) {
+        alert("Digite a idade!");
+        return;
     }
 
-    if (idade > 6) {
+    localStorage.setItem("idadeCrianca", idade);
+
+    if (idade <= 6) {
+        window.location.href = "index1.html";
+    } else {
         window.location.href = "index2.html";
     }
-});
+}
 </script>
+
+</body>
+</html>
