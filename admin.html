@@ -198,7 +198,8 @@
 
 <body>
 
-<a href="index3.html" class="btn-voltar">⬅️ Página Editável</a>
+<!-- (corrigido: voltar para a página real de origem) -->
+<a href="#" class="btn-voltar" id="btnVoltarTopo">⬅️ Página Editável</a>
 
 <div id="container">
     <h1>Administração de Tarefas</h1>
@@ -211,6 +212,20 @@
 </div>
 
 <script>
+    /* ============================
+       CAPTURA DA ORIGEM
+    ============================ */
+    const origem = localStorage.getItem("origemAdmin") || "index3.html";
+
+    /* Botão do topo agora volta para a página certa */
+    document.getElementById("btnVoltarTopo").onclick = function () {
+        window.location.href = origem;
+    };
+
+    /* ============================
+       FUNÇÕES DAS TAREFAS
+    ============================ */
+
     let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
 
     function salvar() {
@@ -295,7 +310,7 @@
 
         document.getElementById("btnOkSucesso").onclick = () => {
             modal.remove();
-            window.location.href = "index3.html";
+            window.location.href = origem;
         };
     }
 

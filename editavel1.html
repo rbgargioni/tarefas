@@ -29,8 +29,8 @@
             <h1>QUADRO DE TAREFAS</h1>
             <div class="progress-ring">
                 <svg width="90" height="90">
-                 <!--    <circle class="progress-ring-bg" cx="45" cy="45" r="35"/>
-                    <circle class="progress-ring-progress" cx="45" cy="45" r="35"/> -->
+                        <rcle class="progress-ring-bg" cx="45" cy="45" r="35"/>
+                        <rcle class="progress-ring-progress" cx="45" cy="45" r="35"/>
                 </svg>
                 <div class="progress-text">0%</div>
             </div>
@@ -59,16 +59,14 @@
 
     <div class="buttons">
         <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
-
-        <button class="btn btn-clear" 
-                onclick="if(confirm('Deseja limpar todos os checks?')){ localStorage.clear(); location.reload(); }">
-            🔄 Limpar Semana
-        </button>
-
+    <button class="btn btn-clear" onclick="if(confirm('Deseja limpar todos os checks?')){localStorage.clear();location.reload();}">🔄 Limpar Semana</button>
+    <!-- NOVO BOTÃO -->
         <button class="btn btn-clear-day" onclick="limparDiaAtual()">🗑️ Limpar Dia</button>
 
         <button class="btn btn-clear-idade" onclick="resetarIdade()">Alterar minha idade</button>
-        <a href="admin.html" class="btn-advanced">⚙️ Administrar Tarefas</a>
+        <a href="admin.html" class="btn-advanced" onclick="localStorage.setItem('origemAdmin', window.location.pathname)">
+    ⚙️ Administrar Tarefas
+</a>
     </div>
 </div>
 

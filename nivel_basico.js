@@ -81,6 +81,7 @@ const perguntas = [
         opcoes: ["5", "6", "7"]
     }
 ];
+
 let indicePerguntaAtual = 0;
 
 // ==============================
@@ -126,6 +127,7 @@ function pararPensando() {
     audio.pause();
     audio.currentTime = 0; // voltar ao início caso queira
 }
+
 // ==============================
 // Fogos 🎆 (igual)
 // ==============================
@@ -443,9 +445,12 @@ function mostrarModalSucesso() {
         if (modalSucesso.parentNode) modalSucesso.remove();
     }, 2500);
 }
+
+
 function resetarIdade() {
-    localStorage.clear();
     localStorage.removeItem("idadeCrianca");
+    localStorage.clear();
+   // location.reload();
     const modalErro = document.createElement("div");
     modalErro.id = "modalErro";
     modalErro.className = "modal-erro";

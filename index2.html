@@ -37,8 +37,8 @@
                 <h1>QUADRO DE TAREFAS</h1>
                 <div class="progress-ring">
                     <svg width="90" height="90">
-                   <!-- <circle class="progress-ring-bg" cx="45" cy="45" r="35"/>
-                        <circle class="progress-ring-progress" cx="45" cy="45" r="35"/>-->
+                        <rcle class="progress-ring-bg" cx="45" cy="45" r="35"/>
+                        <rcle class="progress-ring-progress" cx="45" cy="45" r="35"/>
                     </svg>
                     <div class="progress-text">0%</div>
                 </div>
@@ -127,3 +127,27 @@
 
 </body>
 </html>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    // Se já salvou a idade antes, não pergunta novamente
+    let idade = localStorage.getItem("idadeCrianca");
+
+    if (!idade) {
+        idade = prompt("Quantos anos você tem?");
+        idade = parseInt(idade);
+
+        if (!idade || idade <= 0) {
+            alert("Idade inválida. Carregando versão simples.");
+            localStorage.setItem("idadeCrianca", 5);
+            return;
+        }
+
+        localStorage.setItem("idadeCrianca", idade);
+    }
+
+    if (idade <= 6) {
+        window.location.href = "index1.html";
+    }
+});
+</script>

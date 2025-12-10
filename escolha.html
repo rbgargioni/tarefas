@@ -5,32 +5,85 @@
 <title>Escolher Tipo</title>
 
 <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial;
-    background: rgba(0,0,0,0.3);
-    display: flex;
+    font-family: 'Arial', sans-serif;
+    background: rgba(0,0,0,0.7);
     height: 100vh;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
+
+/* ====== CAIXA ESTILO MODAL ====== */
 .box {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
+    background: linear-gradient(135deg, #fff, #f8f9fa);
+    padding: 40px 30px;
+    border-radius: 25px;
     text-align: center;
-    width: 300px;
+    border: 4px solid #ffd700;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    animation: bounceIn 0.6s ease;
+    width: 90%;
+    max-width: 420px;
 }
-button {
+
+h2 {
+    font-size: 2.4em;
+    color: #333;
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+/* ====== BOTÕES ESTILO MODAL ====== */
+.btn {
     width: 100%;
-    padding: 15px;
-    margin-top: 10px;
+    padding: 18px;
     border: none;
-    border-radius: 10px;
-    font-size: 18px;
+    border-radius: 15px;
+    font-size: 1.4em;
+    font-weight: bold;
     cursor: pointer;
+    margin-top: 15px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    transition: 0.25s ease;
 }
-.btn1 { background: #0099cc; color: white; }
-.btn2 { background: #4CAF50; color: white; }
+
+.btn1 {
+    background: linear-gradient(135deg, #2a6ad3, #1c4da3);
+}
+
+.btn1:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(42,106,211,0.4);
+}
+
+.btn2 {
+    background: linear-gradient(135deg, #27ae60, #1e8449);
+}
+
+.btn2:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(39,174,96,0.4);
+}
+
+/* ===== ANIMAÇÃO IGUAL À DAS MODAIS ===== */
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+}
 </style>
 
 </head>
@@ -39,8 +92,8 @@ button {
 <div class="box">
     <h2>Escolha o tipo de tarefas</h2>
 
-    <button class="btn1" onclick="abrirPadrao()">📘 Tarefas Padrão</button>
-    <button class="btn2" onclick="abrirEditavel()">📝 Tarefas Editáveis</button>
+    <button class="btn btn1" onclick="abrirPadrao()">📘 Tarefas Padrão</button>
+    <button class="btn btn2" onclick="abrirEditavel()">📝 Tarefas Editáveis</button>
 </div>
 
 <script>
