@@ -442,7 +442,135 @@ function mostrarModalSucesso() {
         if (modalSucesso.parentNode) modalSucesso.remove();
     }, 2500);
 }
+// ---- FUNÇÕES DO MAPA ----
 
+// retorna pontos de referência do caminho (marcadores do SVG)
+function getRangeOfPath() {
+  const svg = document.getElementById("svgMapa");
+  if (!svg) return [];
+
+  const marcadores = svg.querySelectorAll("#marcadores .ponto");
+  const pts = Array.from(marcadores).map(c => ({
+    x: Number(c.getAttribute("cx")),
+    y: Number(c.getAttribute("cy"))
+  }));
+
+  if (pts.length === 0) {
+    return [
+      { x: 60,  y: 360 },
+      { x: 900, y: 285 }
+    ];
+  }
+  return pts;
+}
+
+// move mascote conforme percentual de progresso (0–100)
+function moveMascoteParaPercentual(percent) {
+  const p = Math.max(0, Math.min(100, Number(percent)));
+  const pts = getRangeOfPath();
+  const n = pts.length;
+  if (n === 0) return;
+
+  const t   = (p / 100) * (n - 1);
+  const idx = Math.floor(t);
+  const frac = t - idx;
+
+  const a = pts[idx];
+  const b = pts[Math.min(idx + 1, n - 1)];
+
+  const x = a.x + (b.x - a.x) * frac;
+  const y = a.y + (b.y - a.y) * frac;
+
+  const svg = document.getElementById("svgMapa");
+  const mascoteDom = document.getElementById("mascoteDom");
+  if (!svg || !mascoteDom) return;
+
+  const pt = svg.createSVGPoint();
+  pt.x = x;
+  pt.y = y;
+
+  const ctm = svg.getScreenCTM();
+  if (!ctm) {
+    mascoteDom.style.left = x + "px";
+    mascoteDom.style.top  = y + "px";
+    return;
+  }
+
+  const screenPt = pt.matrixTransform(ctm);
+  const mapaCanvas = document.getElementById("mapaCanvas");
+  const rect = mapaCanvas.getBoundingClientRect();
+
+  const left = screenPt.x - rect.left;
+  const top  = screenPt.y - rect.top;
+
+  mascoteDom.style.left = left + "px";
+  mascoteDom.style.top  = top  + "px";
+
+  const span = document.getElementById("mapaPercent");
+  if (span) span.textContent = Math.round(p);
+}
+
+// mostra modal do mapa com animação do mascote
+function mostrarAnimacaoMapa(callbackDepois) {
+  const modal = document.getElementById("modalMapa");
+  const mascote = document.getElementById("mascoteDom");
+  const mapaCanvas = document.getElementById("mapaCanvas");
+
+  if (!modal || !mascote || !mapaCanvas) {
+    if (callbackDepois) callbackDepois();
+    return;
+  }
+
+  modal.style.display = "flex";
+  modal.setAttribute("aria-hidden", "false");
+
+  mascote.classList.add("pulse");
+
+  const rect = mapaCanvas.getBoundingClientRect();
+  mascote.style.left = (rect.left + 60) + "px";
+  mascote.style.top  = (rect.top + 360) + "px";
+
+  const pct = calcularProgressoDiaAtual();
+
+  requestAnimationFrame(() => {
+    moveMascoteParaPercentual(pct);
+  });
+
+  setTimeout(() => {
+    mascote.classList.remove("pulse");
+    if (callbackDepois) {
+      setTimeout(callbackDepois, 300);
+    }
+  }, 1250);
+}
+
+// eventos de abrir/fechar mapa
+document.addEventListener("DOMContentLoaded", () => {
+  const btnVerMapa = document.getElementById("btnVerMapa");
+  const btnFecharMapa = document.getElementById("fecharMapa");
+
+  if (btnVerMapa) {
+    btnVerMapa.addEventListener("click", () => {
+      const pct = calcularProgressoDiaAtual();
+      moveMascoteParaPercentual(pct);
+      document.getElementById("modalMapa").style.display = "flex";
+    });
+  }
+
+  if (btnFecharMapa) {
+    btnFecharMapa.addEventListener("click", () => {
+      const modal = document.getElementById("modalMapa");
+      modal.style.display = "none";
+      modal.setAttribute("aria-hidden", "true");
+    });
+  }
+
+  // reposiciona mascote se a janela mudar de tamanho
+  window.addEventListener("resize", () => {
+    const pct = calcularProgressoDiaAtual();
+    setTimeout(() => moveMascoteParaPercentual(pct), 120);
+  });
+});
 
 function resetarIdade() {
     localStorage.removeItem("idadeCrianca");

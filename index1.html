@@ -28,6 +28,34 @@
             <button id="fecharFolga" class="mensagem-botao">OK</button>
         </div>
     </div>-->
+
+    <!-- MODAL DO MAPA -->
+<div id="modalMapa" class="modal-mapa" aria-hidden="true">
+  <div class="mapa-wrapper" role="dialog" aria-modal="true">
+    <div class="mapa-topbar">
+      <h3>Mapa do Progresso</h3>
+      <button id="fecharMapa" class="btn-ver-mapa">Fechar</button>
+    </div>
+
+    <div class="mapa-canvas" id="mapaCanvas">
+      <!-- SVG do MAPA -->
+      <svg id="svgMapa" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet" style="width:100%; height:100%;">
+        <!-- fundo céu/grama/caminho, etc. -->
+        <!-- ... seu SVG aqui (caminho, marcadores, mascoteSVG, etc.) ... -->
+      </svg>
+
+      <!-- mascote DOM que será movido no mapa -->
+      <div class="mascote" id="mascoteDom" aria-hidden="true" style="left:60px; top:360px;">
+        <!-- pode ser o mesmo desenho SVG simplificado dentro deste div -->
+        <!-- ... SVG do mascote ... -->
+      </div>
+
+      <div class="mapa-legend" id="mapaLegendProgresso">
+        Progresso de hoje: <span id="mapaPercent">0</span>%
+      </div>
+    </div>
+  </div>
+</div>
     <!-- MODAL DE ERRO (mantida) -->
     <div id="modalErroTemplate" style="display: none;"></div>
 
@@ -169,6 +197,7 @@
     <!-- NOVO BOTÃO -->
     <button class="btn btn-clear-day" onclick="limparDiaAtual()">🗑️ Limpar Dia</button>
     <button class="btn btn-clear-idade" onclick="resetarIdade()">❗ Errei minha idade </button>
+    <button class="btn btn-advanced" id="btnVerMapa">🗺️ Ver Mapa</button>
 </div>
     </div>
 

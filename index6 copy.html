@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Quadro de Tarefas - Com Mapa</title>
+
+<!-- =======================
+     SEU CSS (mantido)
+     ======================= -->
+<style>
+/* (START - seu CSS colado sem alterações) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    background-color: white;
+    border: 3px solid #333;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.header-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-line h1 {
+    font-size: 3.4em;
+    color: #333;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 1.1em;
+    margin-top: 8px;
+}
+
+.progress-ring {
+    position: relative;
+    width: 75px;
+    height: 75px;
+}
+
+.progress-ring svg {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-bg {
+    fill: none;
+    stroke: #e0e0e0;
+    stroke-width: 9;
+}
+
+.progress-ring-progress {
+    fill: none;
+    stroke: #27ae60;
+    stroke-width: 9;
+    stroke-linecap: round;
+    stroke-dasharray: 219.8;
+    stroke-dashoffset: 219.8;
+    transition: stroke-dashoffset 0.5s ease;
+}
+
+.progress-text {
+    position: absolute;
+    top: 58%;
+    left: 58%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+thead {
+    background-color: #2c3e50;
+    color: white;
+}
+
+th {
+    padding: 12px;
+    text-align: center;
+    border: 2px solid #34495e;
+    text-transform: uppercase;
+    font-size: 1.05em;
+}
+
+td {
+    border: 2px solid #bdc3c7;
+    padding: 12px;
+    text-align: center;
+    font-size: 1em;
+}
+
+.task-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: bold;
+    gap: 5px;
+}
+
+.task-icon {
+    font-size: 2.2em;
+}
+
+.checkbox {
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+}
+
+.dia-atual {
+    background-color: #ffeaa7 !important;
+    border-color: #fdcb6e !important;
+}
+
+thead .dia-atual {
+    background-color: #e17055 !important;
+    color: white !important;
+}
+
+.buttons {
+    margin-top: 18px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn {
+display: inline-flex;
+    align-items: center;
+    gap: 8px;
+   
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: 0.25s ease;
+    border: none;
+}
+
+.btn-print {
+    background-color: #27ae60;
+}
+
+.btn-print:hover {
+    background-color: #1e8449;
+}
+
+.btn-clear {
+    background-color: #c0392b;
+}
+
+.btn-clear:hover {
+    background-color: #922b21;
+}
+
+#fireworksCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: none;
+    z-index: 99999;
+}
+
+/* MODAL PRINCIPAL */
+.modal-pergunta {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 100000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-conteudo {
+    background: linear-gradient(135deg, #fff, #f8f9fa);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    border: 4px solid #ffd700;
+    animation: bounceIn 0.5s ease;
+}
+
+.modal-pergunta-texto {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 25px;
+    line-height: 1.3;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* OPCOES MULTIPLA ESCOLHA */
+.modal-opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+.btn-advanced {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #2a6ad3, #1c4da3);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: 0.25s ease;
+    border: none;
+}
+
+.btn-advanced:hover {
+    background: linear-gradient(135deg, #3578ed, #1c4da3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+.btn-warning2 {
+    background: linear-gradient(135deg, #d9534f, #b52e2b);
+}
+
+.btn-warning2:hover {
+    background: linear-gradient(135deg, #ff6b66, #b52e2b);
+}
+
+.opcao-btn {
+    padding: 20px 15px;
+    font-size: 1.6em;
+    border: 4px solid #ddd;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #fff, #f0f8ff);
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.opcao-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.opcao-btn.correta {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb) !important;
+    border-color: #28a745 !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 0 30px rgba(40, 167, 69, 0.5) !important;
+}
+
+.opcao-btn.errada {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb) !important;
+    border-color: #dc3545 !important;
+    animation: shake 0.5s ease-in-out;
+}
+
+.modal-botoes {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-modal {
+    padding: 15px 30px;
+    font-size: 1.3em;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    min-width: 140px;
+}
+
+.cancelar {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.cancelar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(231, 76, 60, 0.4);
+}
+
+/* MODAL DE ERRO */
+.modal-erro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 100001;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: shake 0.5s ease-in-out;
+}
+
+.modal-erro-conteudo {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    padding: 40px 30px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(231, 76, 60, 0.4);
+    border: 5px solid #f8bbd9;
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal-erro-emoji {
+    font-size: 4em;
+    margin-bottom: 15px;
+}
+
+.modal-erro-texto {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #c62828;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.modal-erro-subtexto {
+    font-size: 1.4em;
+    color: #880e4f;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+
+.btn-erro-ok {
+    padding: 18px 35px;
+    font-size: 1.4em;
+    background: linear-gradient(45deg, #ff9800, #ff5722);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255, 152, 0, 0.4);
+    transition: all 0.3s;
+}
+
+.btn-erro-ok:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 25px rgba(255, 152, 0, 0.6);
+}
+
+.btn-clear-day {
+    background-color: #f39c12;
+}
+.btn-clear-day:hover {
+    background-color: #e67e22;
+}
+
+.btn-clear-idade {
+    background-color: rgb(230, 57, 34);
+}
+.btn-clear-idade:hover {
+    background-color: rgba(255, 31, 2, 0.527);
+}
+/* MODAL CONFIRMAR LIMPAR */
+.modal-confirmar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 100002;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-confirm-conteudo {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    padding: 40px 30px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    border: 5px solid #f39c12;
+    max-width: 450px;
+    width: 90%;
+}
+
+.modal-confirm-emoji {
+    font-size: 4em;
+    margin-bottom: 15px;
+}
+
+.modal-confirm-texto {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #856404;
+    margin-bottom: 10px;
+}
+
+.modal-confirm-subtexto {
+    font-size: 1.4em;
+    color: #665d33;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+
+.modal-confirm-botoes {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-confirm-sim {
+    padding: 15px 30px;
+    font-size: 1.3em;
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
+    transition: all 0.3s;
+}
+
+.btn-confirm-sim:hover {
+    transform: scale(1.05);
+}
+
+.btn-confirm-nao {
+    padding: 15px 30px;
+    font-size: 1.3em;
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+    transition: all 0.3s;
+}
+
+.btn-confirm-nao:hover {
+    transform: scale(1.05);
+}
+/* Fundo escuro */
+.mensagem-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+}
+
+/* Caixa da mensagem */
+.mensagem-caixa {
+    background: #fff;
+    padding: 25px 30px;
+    width: 340px;
+    border-radius: 18px;
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.25);
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Título */
+.mensagem-titulo {
+    font-size: 1.7em;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Texto */
+.mensagem-texto {
+    font-size: 1.2em;
+    margin-bottom: 25px;
+    color: #555;
+}
+
+/* Botão padrão azul */
+.mensagem-botao {
+    background: #0278d4;
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: 0.2s;
+}
+
+.mensagem-botao:hover {
+    background: #005fa7;
+}
+/* MODAL SUCESSO */
+.modal-sucesso {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 100003;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: bounceIn 0.5s ease;
+}
+
+.modal-sucesso-conteudo {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    padding: 40px 30px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(40, 167, 69, 0.4);
+    border: 5px solid #28a745;
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal-sucesso-emoji {
+    font-size: 4.5em;
+    margin-bottom: 15px;
+}
+
+.modal-sucesso-texto {
+    font-size: 2.8em;
+    font-weight: bold;
+    color: #155724;
+    margin-bottom: 10px;
+}
+
+.modal-sucesso-subtexto {
+    font-size: 1.5em;
+    color: #155724;
+    line-height: 1.4;
+}
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+#parabensTexto {
+    position: fixed;
+    top: 40%;
+    width: 100%;
+    text-align: center;
+    font-size: 80px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(0,0,0,0.8);
+    display: none;
+    animation: aparecer 1s ease-in-out forwards;
+    z-index: 9999;
+}
+
+@keyframes aparecer {
+    0% { opacity: 0; transform: scale(0.7); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@media print {
+    .btn, .progress-ring, .modal-pergunta, .modal-erro { display: none; }
+}
+
+@media (max-width: 1180px) {
+    .container { max-width: 1100px; }
+    .header-line h1 { font-size: 2.2em; }
+    th, td { padding: 10px; font-size: 0.95em; }
+    .task-icon { font-size: 2em; }
+    .checkbox { width: 24px; height: 24px; }
+    .progress-text { top: 75%; left: 70%; }
+    .modal-pergunta-texto { font-size: 1.8em; }
+    .opcao-btn { font-size: 1.4em; padding: 18px 12px; }
+}
+
+@media (max-width: 900px) {
+    .header-line h1 { font-size: 1.9em; }
+    .progress-ring { width: 65px; height: 65px; }
+    th, td { padding: 8px; }
+    .task-icon { font-size: 1.8em; }
+    .checkbox { width: 22px; height: 22px; }
+    .modal-pergunta-texto { font-size: 1.6em; }
+    .opcao-btn { font-size: 1.3em; }
+}
+
+@media (max-width: 768px) {
+    .header-line h1 { font-size: 1.7em; }
+    .progress-ring { width: 60px; height: 60px; }
+    th, td { padding: 6px; font-size: 0.9em; }
+}
+@media (max-width: 480px) {
+
+  body {
+    padding: 5px;
+  }
+
+  .container {
+    padding: 10px;
+    border-width: 2px;
+  }
+
+  .header-line {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .header-line h1 {
+    font-size: 1.4em;
+    text-align: center;
+  }
+
+  .subtitle {
+    font-size: 0.9em;
+  }
+
+  .progress-ring {
+    width: 55px;
+    height: 55px;
+  }
+
+  .progress-text {
+    font-size: 0.9em;
+  }
+
+  /* Tabela: coloca dentro de um scroll horizontal */
+  table {
+    font-size: 0.75em;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  thead th,
+  tbody td {
+    padding: 4px;
+  }
+
+  .task-cell {
+    font-size: 0.8em;
+  }
+
+  .task-icon {
+    font-size: 1.4em;
+  }
+
+  .checkbox {
+    width: 20px;
+    height: 20px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn {
+    width: 100%;
+    font-size: 0.9em;
+    padding: 8px 10px;
+  }
+
+  /* Modais mais compactos */
+  .modal-conteudo,
+  .modal-erro-conteudo,
+  .modal-confirm-conteudo,
+  .modal-sucesso-conteudo {
+    width: 95%;
+    padding: 20px 15px;
+  }
+
+  .modal-pergunta-texto {
+    font-size: 1.4em;
+    min-height: auto;
+  }
+
+  .opcao-btn {
+    font-size: 1.1em;
+    padding: 12px 10px;
+  }
+
+  #parabensTexto {
+    font-size: 2.2rem;
+  }
+}
+/* (END - seu CSS) */
+
+/* ====== Estilos extras para o MAPA e MASCOTE ====== */
+
+.modal-mapa {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 200000;
+    justify-content: center;
+    align-items: center;
+}
+
+.mapa-wrapper {
+    width: min(900px, 95vw);
+    height: min(420px, 65vh);
+    background: linear-gradient(180deg, #cdebf2, #fff);
+    border-radius: 18px;
+    padding: 12px;
+    position: relative;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+    overflow: hidden;
+}
+
+.mapa-canvas {
+    position: absolute;
+    inset: 12px;
+    border-radius: 12px;
+    background: linear-gradient(180deg,#b9f6ca 0%, #e6ffe6 40%, #fff 100%); /* gramado */
+    overflow: hidden;
+}
+
+.mapa-topbar {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    gap:12px;
+}
+.mapa-topbar h3 { color: #155724; margin:0; font-size:1.2em;}
+.mapa-topbar button { border:none; background:#ffcc00; padding:8px 12px; border-radius:8px; font-weight:bold; cursor:pointer; }
+
+.mascote {
+    position: absolute;
+    width: 74px;
+    height: 74px;
+    transform: translate(-50%, -50%) scale(1);
+    transition: transform 1200ms cubic-bezier(.2,.8,.2,1), left 1200ms cubic-bezier(.2,.8,.2,1), top 1200ms cubic-bezier(.2,.8,.2,1);
+    z-index: 30;
+    pointer-events: none;
+}
+
+/* adiciona uma pequena sombra/pulse ao mascote */
+.mascote.pulse {
+    animation: pulse 1.4s infinite;
+}
+@keyframes pulse {
+    0% { transform: translate(-50%,-50%) scale(1); filter: drop-shadow(0 6px 6px rgba(0,0,0,0.12)); }
+    50% { transform: translate(-50%,-50%) scale(1.06); filter: drop-shadow(0 14px 18px rgba(0,0,0,0.12)); }
+    100% { transform: translate(-50%,-50%) scale(1); }
+}
+
+/* pequenos ícones do mapa */
+.mapa-icon { position:absolute; width:48px; height:48px; transform:translate(-50%,-50%); z-index:20; pointer-events:none; }
+
+/* legendinha de progresso */
+.mapa-legend {
+    position:absolute;
+    left:12px;
+    bottom:12px;
+    background: rgba(255,255,255,0.9);
+    padding:8px 12px;
+    border-radius:12px;
+    font-weight:bold;
+    box-shadow:0 6px 12px rgba(0,0,0,0.08);
+    color:#333;
+}
+
+/* botão ver mapa */
+.btn-ver-mapa {
+    background: linear-gradient(45deg,#ffd54f,#ffb300);
+    color:#222;
+    padding:10px 14px;
+    border-radius:10px;
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* responsividade do mapa */
+@media (max-width:600px){
+    .mascote { width:54px; height:54px; }
+    .mapa-wrapper { height:56vh; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- ========== HTML PRINCIPAL (mantive sua estrutura) ========== -->
+<canvas id="fireworksCanvas"></canvas>
+
+<div id="modalPergunta" class="modal-pergunta">
+    <div class="modal-conteudo">
+        <div class="modal-pergunta-texto" id="modalPerguntaTexto"></div>
+        <div class="modal-opcoes" id="modalOpcoes"></div>
+        <div class="modal-botoes">
+            <button id="modalBtnCancelar" class="btn-modal cancelar">❌ Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DO MAPA -->
+<div id="modalMapa" class="modal-mapa" aria-hidden="true">
+    <div class="mapa-wrapper" role="dialog" aria-modal="true">
+        <div class="mapa-topbar">
+            <h3>Mapa do Progresso</h3>
+            <div>
+                <button id="fecharMapa" class="btn-ver-mapa">Fechar</button>
+            </div>
+        </div>
+
+        <div class="mapa-canvas" id="mapaCanvas">
+            <!-- SVG do mapa (desenho infantil) -->
+            <svg id="svgMapa" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet" style="width:100%; height:100%;">
+                <!-- background sol e nuvens -->
+                <defs>
+                    <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0" stop-color="#b3e5fc"/>
+                        <stop offset="1" stop-color="#e1f5fe"/>
+                    </linearGradient>
+                </defs>
+                <rect x="0" y="0" width="1000" height="500" fill="url(#skyGrad)"/>
+                <!-- grama -->
+                <ellipse cx="500" cy="520" rx="900" ry="250" fill="#b9f6ca" />
+                <!-- caminho (curvo) -->
+                <path id="caminho" d="M 40 360 Q 180 300 260 340 T 420 320 T 600 300 T 760 320 T 940 280" stroke="#f3e5ab" stroke-width="42" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M 40 360 Q 180 300 260 340 T 420 320 T 600 300 T 760 320 T 940 280" stroke="#f0d070" stroke-width="20" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+                <!-- árvores e casinhas decorativas (repetidas) -->
+                <g id="decor">
+                    <g transform="translate(120,300)">
+                        <circle cx="0" cy="-40" r="40" fill="#2ecc71"></circle>
+                        <rect x="-12" y="-10" width="24" height="50" fill="#6d4c41"></rect>
+                    </g>
+                    <g transform="translate(340,330)">
+                        <rect x="-18" y="-20" width="36" height="36" fill="#ffcc80" rx="6"></rect>
+                        <polygon points="-24,-20 0,-50 24,-20" fill="#ff8a65"></polygon>
+                    </g>
+                    <g transform="translate(620,290)">
+                        <circle cx="0" cy="-40" r="42" fill="#66bb6a"></circle>
+                        <rect x="-10" y="-10" width="20" height="48" fill="#8d6e63"></rect>
+                    </g>
+                    <g transform="translate(840,300)">
+                        <rect x="-22" y="-22" width="44" height="44" fill="#b39ddb" rx="6"></rect>
+                        <polygon points="-26,-22 0,-58 26,-22" fill="#9575cd"></polygon>
+                    </g>
+                </g>
+
+                <!-- pontos visuais ao longo do caminho (para referência) -->
+                <g id="marcadores">
+                    <!-- cria 7 marcadores, estarão ao longo do caminho por posição relativa -->
+                    <circle class="ponto" cx="60" cy="360" r="10" fill="#fff" stroke="#ffd54f" stroke-width="4"></circle>
+                    <circle class="ponto" cx="200" cy="320" r="10" fill="#fff" stroke="#ffd54f" stroke-width="4"></circle>
+                    <circle class="ponto" cx="300" cy="340" r="10" fill="#fff" stroke="#ffd54f" stroke-width="4"></circle>
+                    <circle class="ponto" cx="420" cy="320" r="10" fill="#fff" stroke="#ffd54f" stroke-width="4"></circle>
+                    <circle class="ponto" cx="560" cy="305" r="10" fill="#fff" stroke="#ffd54f" stroke-width="4"></circle>
+                    <circle class="ponto" cx="720" cy="318" r="10" fill="#fff" stroke="#ffd54f" stroke-width="4"></circle>
+                    <circle class="ponto" cx="900" cy="285" r="10" fill="#fff" stroke="#ffd54f" stroke-width="4"></circle>
+                </g>
+
+                <!-- mascote (svg simples de mascote fofinho) -->
+                <g id="mascoteSVG" transform="translate(60,360)">
+                    <g id="mascoteGroup">
+                        <circle cx="0" cy="-14" r="26" fill="#ffd1dc" stroke="#ff8aa0" stroke-width="3"/>
+                        <circle cx="-9" cy="-20" r="4" fill="#333"/>
+                        <circle cx="9" cy="-20" r="4" fill="#333"/>
+                        <path d="M -8 -6 Q 0 6 8 -6" stroke="#b71c1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <rect x="-12" y="8" width="24" height="20" rx="6" fill="#ffb74d" stroke="#ff8a00" stroke-width="2"/>
+                        <circle cx="-10" cy="-36" r="5" fill="#ff8a80"/>
+                        <circle cx="10" cy="-36" r="5" fill="#ff8a80"/>
+                    </g>
+                </g>
+
+            </svg>
+
+            <div class="mascote" id="mascoteDom" aria-hidden="true" style="left:60px; top:360px;">
+                <!-- mascote SVG inline (same as above but as <img> replacement) -->
+                <svg width="74" height="74" viewBox="-40 -60 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                        <circle cx="0" cy="-14" r="26" fill="#ffd1dc" stroke="#ff8aa0" stroke-width="3"/>
+                        <circle cx="-9" cy="-20" r="4" fill="#333"/>
+                        <circle cx="9" cy="-20" r="4" fill="#333"/>
+                        <path d="M -8 -6 Q 0 6 8 -6" stroke="#b71c1c" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <rect x="-12" y="8" width="24" height="20" rx="6" fill="#ffb74d" stroke="#ff8a00" stroke-width="2"/>
+                        <circle cx="-10" cy="-36" r="5" fill="#ff8a80"/>
+                        <circle cx="10" cy="-36" r="5" fill="#ff8a80"/>
+                    </g>
+                </svg>
+            </div>
+
+            <div class="mapa-legend" id="mapaLegend">Progresso: <span id="mapaPercent">0%</span></div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <div class="header-line">
+            <h1>QUADRO DE TAREFAS</h1>
+            <div class="progress-ring">
+                <svg width="90" height="90">
+                    <circle class="progress-ring-bg" cx="45" cy="45" r="35"/>
+                    <circle class="progress-ring-progress" cx="45" cy="45" r="35"/>
+                </svg>
+                <div class="progress-text">0%</div>
+            </div>
+        </div>
+        <p class="subtitle">Semana de ______</p>
+    </div>
+
+    <div id="parabensTexto">PARABÉNS!! 🎉</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>TAREFAS</th>
+                <th>SEGUNDA</th>
+                <th>TERÇA</th>
+                <th>QUARTA</th>
+                <th>QUINTA</th>
+                <th>SEXTA</th>
+                <th>SÁBADO</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- algumas linhas de exemplo (mantive suas tarefas) -->
+            <tr>
+                <td class="task-cell"><div class="task-icon">🥪</div>Tomar Café da Manhã</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td class="task-cell"><div class="task-icon">🦷</div>Escovar os Dentes</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td class="task-cell"><div class="task-icon">🚽</div>Banheiro</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td class="task-cell"><div class="task-icon">🥤</div>Beber Água</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td class="task-cell"><div class="task-icon">🧸</div>Guardar os Brinquedos</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td class="task-cell"><div class="task-icon">🛏️</div>Arrumar a Cama</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td class="task-cell"><div class="task-icon">📚</div>Fazer as Tarefas</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td class="task-cell"><div class="task-icon">🍽️</div>Comer Bem</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td class="task-cell"><div class="task-icon">🤐</div>Não Falar Palavrão</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td class="task-cell"><div class="task-icon">👕</div>Guardar as Roupas</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+            <tr>
+                <td class="task-cell"><div class="task-icon">🚿</div>Tomar Banho</td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><input type="checkbox" class="checkbox"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="buttons">
+        <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
+        <button class="btn btn-clear" onclick="if(confirm('Deseja limpar todos os checks?')){localStorage.clear();location.reload();}">🔄 Limpar Semana</button>
+        <button class="btn btn-clear-day" onclick="limparDiaAtual()">🗑️ Limpar Dia</button>
+        <button class="btn btn-clear-idade" onclick="resetarIdade()">❗ Errei minha idade </button>
+        <button class="btn btn-advanced" id="btnVerMapa">🗺️ Ver Mapa</button>
+    </div>
+</div>
+
+<!-- Áudios (mantidos) -->
+<audio id="fireworkSound" src="fireworks2.mp3" preload="auto"></audio>
+<audio id="clickSound" src="click.mp3" preload="auto"></audio>
+<audio id="errorSound" src="erro.mp3" preload="auto"></audio>
+<audio id="pensando" src="super_mario_medley.mp3" preload="auto"></audio>
+
+<!-- ========================
+     SCRIPT.JS COMPLETO
+     (integrado e comentado)
+     ======================== -->
+<script>
+/* ------------------------
+   PERGUNTAS (mantive suas perguntas)
+   ------------------------ */
+const perguntas = [
+    { pergunta: "Quantos dedos tem uma mão? 🤚", correta: "5", opcoes: ["3","5","10"] },
+    { pergunta: "Qual é a cor do céu? ☁️", correta: "azul", opcoes: ["verde","azul","amarelo"] },
+    { pergunta: "Quantas pernas tem uma mesa? 🪑", correta: "4", opcoes: ["2","3","4"] },
+    { pergunta: "Qual é o primeiro dia da semana?", correta: "segunda", opcoes: ["sexta","segunda","domingo"] },
+    { pergunta: "Quantas rodas tem uma bicicleta? 🚲", correta: "2", opcoes: ["2","4","6"] },
+    { pergunta: "O que é vermelho e tem sementes? 🍓", correta: "morango", opcoes: ["banana","morango","uva"] },
+    { pergunta: "Quantos meses tem um ano? 📅", correta: "12", opcoes: ["10","12","15"] },
+    { pergunta: "Qual animal faz au au? 🐶", correta: "cachorro", opcoes: ["gato","cachorro","coelho"] },
+    { pergunta: "Quantas cores tem o arco-íris? 🌈", correta: "7", opcoes: ["5","7","10"] },
+    { pergunta: "O que você faz com os dentes? 🦷", correta: "escovar", opcoes: ["comer","escovar","pintar"] },
+    { pergunta: "Onde dormimos? 🛏️", correta: "cama", opcoes: ["mesa","cama","carro"] },
+    { pergunta: "Quantas mãos você tem? ✋", correta: "2", opcoes: ["1","2","4"] },
+    { pergunta: "Qual é o oposto de grande? 📏", correta: "pequeno", opcoes: ["grande","pequeno","médio"] },
+    { pergunta: "O que bebemos da torneira? 🥤", correta: "água", opcoes: ["leite","água","suco"] },
+    { pergunta: "Quantos dias tem uma semana? 📆", correta: "7", opcoes: ["5","6","7"] }
+];
+
+let indicePerguntaAtual = 0;
+
+/* =========================
+   SONS
+   ========================= */
+function tocarSomErro() {
+    const audio = document.getElementById("errorSound");
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play().catch(()=>{});
+}
+
+function tocarPensando() {
+    const audio = document.getElementById("pensando");
+    if (!audio) return;
+
+    const inicio = 103; // segundos
+    const fim = 125;
+
+    function startAudio() {
+        audio.currentTime = inicio;
+        audio.play().catch(()=>{});
+        const interval = setInterval(() => {
+            if (audio.currentTime >= fim) {
+                audio.pause();
+                clearInterval(interval);
+            }
+        }, 200);
+    }
+
+    if (audio.readyState >= 1) startAudio();
+    else audio.addEventListener("loadedmetadata", startAudio, { once: true });
+}
+function pararPensando() {
+    const audio = document.getElementById("pensando");
+    if (!audio) return;
+    audio.pause();
+    audio.currentTime = 0;
+}
+
+function tocarSomClick() {
+    const audio = document.getElementById("clickSound");
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.play().catch(()=>{});
+}
+
+/* =========================
+   FOGOS (mantive sua versão)
+   ========================= */
+function iniciarFogos() {
+    mostrarParabens();
+    const canvas = document.getElementById("fireworksCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.style.display = "block";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let particles = [];
+    let fogoSomTocado = false;
+    function tocarSomFogos() {
+        const audio = document.getElementById("fireworkSound");
+        if (!audio || fogoSomTocado) return;
+        fogoSomTocado = true;
+        audio.currentTime = 0;
+        audio.play().catch(()=>{});
+        setTimeout(()=>{ audio.pause(); audio.currentTime = 0; }, 5000);
+    }
+
+    function random(min,max){ return Math.random()*(max-min)+min; }
+
+    function createFirework() {
+        tocarSomFogos();
+        const x = random(100, window.innerWidth-100);
+        const y = random(50, window.innerHeight/2);
+        for(let i=0;i<60;i++){
+            particles.push({
+                x,y, angle: random(0,Math.PI*2), speed: random(2,6),
+                radius:2, life:60, color:`hsl(${random(0,360)},100%,60%)`
+            });
+        }
+    }
+
+    function loop() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        particles.forEach((p,i)=>{
+            p.x += Math.cos(p.angle)*p.speed;
+            p.y += Math.sin(p.angle)*p.speed;
+            p.life--;
+            ctx.beginPath();
+            ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+            if(p.life<=0) particles.splice(i,1);
+        });
+        if(Math.random()<0.05) createFirework();
+        if(particles.length>0) requestAnimationFrame(loop);
+        else canvas.style.display = "none";
+    }
+
+    createFirework();
+    loop();
+}
+
+/* =========================
+   FUNÇÕES DE PROGRESSO (mantidas)
+   ========================= */
+function bloquearDiasExcetoHoje() {
+    const dia = new Date().getDay();
+    const col = {1:1,2:2,3:3,4:4,5:5,6:6}[dia];
+    if (!col) return;
+    document.querySelectorAll("table tr").forEach(row=>{
+        Array.from(row.children).forEach((cel, index)=>{
+            const chk = cel.querySelector("input[type='checkbox']");
+            if (chk && index !== col) {
+                chk.disabled = true;
+                chk.classList.add("bloqueado");
+            }
+        });
+    });
+}
+
+function calcularProgressoDiaAtual() {
+    const dia = new Date().getDay();
+    const col = {1:1,2:2,3:3,4:4,5:5,6:6}[dia];
+    if (!col) return 0;
+    const linhas = document.querySelectorAll("tbody tr");
+    let total = 0, marcados = 0;
+    linhas.forEach(row=>{
+        const cel = row.children[col];
+        const chk = cel.querySelector("input[type='checkbox']");
+        if (chk) {
+            total++;
+            if (chk.checked) marcados++;
+        }
+    });
+    if (total === 0) return 0;
+    return Math.round((marcados/total)*100);
+}
+
+function atualizarRelogio() {
+    const pct = calcularProgressoDiaAtual();
+    document.querySelector(".progress-text").textContent = pct + "%";
+    const circ = 2*Math.PI*35;
+    const offset = circ - (pct/100)*circ;
+    document.querySelector(".progress-ring-progress").style.strokeDashoffset = offset;
+    if (pct === 100) iniciarFogos();
+
+    // Atualiza também o mapa (posiciona mascote conforme porcentagem)
+    moveMascoteParaPercentual(pct);
+}
+
+/* =========================
+   MODAIS (pergunta + erro + sucesso)
+   ========================= */
+
+function mostrarModalErro() {
+    const modalErro = document.createElement("div");
+    modalErro.id = "modalErro";
+    modalErro.className = "modal-erro";
+    modalErro.innerHTML = `
+        <div class="modal-erro-conteudo">
+            <div class="modal-erro-emoji">💔</div>
+            <div class="modal-erro-texto">Quase! 😅</div>
+            <div class="modal-erro-subtexto">Tente de novo ou peça ajuda ao papai/mamãe!</div>
+            <button class="btn-erro-ok">✅ Tentar Novamente</button>
+        </div>
+    `;
+    document.body.appendChild(modalErro);
+    
+    setTimeout(()=>{ if(modalErro.parentNode) modalErro.remove(); }, 3000);
+    modalErro.querySelector(".btn-erro-ok").onclick = ()=> modalErro.remove();
+}
+
+function mostrarModalSucesso() {
+    const modalSucesso = document.createElement("div");
+    modalSucesso.id = "modalSucesso";
+    modalSucesso.className = "modal-sucesso";
+    modalSucesso.innerHTML = `
+        <div class="modal-sucesso-conteudo">
+            <div class="modal-sucesso-emoji">✅</div>
+            <div class="modal-sucesso-texto">Dia Limpinho!</div>
+            <div class="modal-sucesso-subtexto">Pronto para começar de novo! ✨</div>
+        </div>
+    `;
+    document.body.appendChild(modalSucesso);
+    
+    setTimeout(()=>{ if(modalSucesso.parentNode) modalSucesso.remove(); }, 2500);
+}
+
+function mostrarParabens() {
+    const texto = document.getElementById("parabensTexto");
+    texto.style.display = "block";
+    setTimeout(()=>{ texto.style.display = "none"; }, 5000);
+}
+
+/* =========================
+   MODAL DE PERGUNTA (integrado ao fluxo)
+   ========================= */
+
+function mostrarModalPergunta(callbackCheckbox) {
+    tocarPensando();
+    const modal = document.getElementById("modalPergunta");
+    const textoPergunta = document.getElementById("modalPerguntaTexto");
+    const containerOpcoes = document.getElementById("modalOpcoes");
+
+    indicePerguntaAtual = Math.floor(Math.random()*perguntas.length);
+    const pergunta = perguntas[indicePerguntaAtual];
+    textoPergunta.textContent = pergunta.pergunta;
+
+    const opcoesEmbaralhadas = [...pergunta.opcoes].sort(()=>Math.random()-0.5);
+
+    containerOpcoes.innerHTML = opcoesEmbaralhadas.map(opcao=>
+        `<button class="opcao-btn" data-resposta="${opcao}">${opcao}</button>`
+    ).join('');
+
+    modal.style.display = "flex";
+
+    document.querySelectorAll(".opcao-btn").forEach(btn=>{
+        btn.onclick = ()=>{
+            pararPensando();
+            const escolhida = btn.dataset.resposta;
+            const correta = pergunta.correta;
+
+            // visual feedback
+            document.querySelectorAll(".opcao-btn").forEach(b=>{
+                b.onclick = null;
+                if (b.dataset.resposta === correta) b.classList.add("correta");
+                else b.classList.add("errada");
+            });
+
+            modal.style.display = "none";
+
+            setTimeout(()=>{ document.querySelectorAll(".opcao-btn").forEach(b=>b.classList.remove("correta","errada")); }, 1500);
+
+            if (escolhida === correta) {
+                // mover mascote conforme porcentagem ATUAL e só depois marcar o checkbox
+                // mostrar animação do mapa -> dentro do callback marcamos o checkbox
+                mostrarAnimacaoMapa(() => {
+                    callbackCheckbox.checked = true;
+                    localStorage.setItem(callbackCheckbox.id, "true");
+
+                    setTimeout(() => {
+        document.getElementById("modalMapa").style.display = "none";
+    }, 3000); // tempo da animação em ms
+                    tocarSomClick();
+                    atualizarRelogio();
+
+                });
+            } else {
+                tocarSomErro();
+                mostrarModalErro();
+                callbackCheckbox.checked = false;
+            }
+        };
+    });
+
+    document.getElementById("modalBtnCancelar").onclick = ()=>{
+        modal.style.display = "none";
+        callbackCheckbox.checked = false;
+        pararPensando();
+    };
+}
+
+/* =========================
+   MAPA & MASCOTE
+   - mascote move conforme porcentagem
+   - modal aparece quando acerta (animação)
+   - botão "Ver mapa" abre modal sem alterar progresso
+   ========================= */
+
+/**
+ * Extrai pontos ao longo do path (caminho SVG) para mapear 0..100%
+ * Mas para simplicidade usamos 7 pontos visuais já posicionados (marcadores),
+ * e interpolamos linearmente no eixo X/Y entre 1º e último ponto.
+ */
+function getRangeOfPath() {
+    // pega os marcadores do svg
+    const svg = document.getElementById("svgMapa");
+    const marcadores = svg.querySelectorAll("#marcadores .ponto");
+    const pts = Array.from(marcadores).map(c => {
+        return { x: Number(c.getAttribute("cx")), y: Number(c.getAttribute("cy")) };
+    });
+    // se não encontrou, fallback em valores
+    if (pts.length === 0) return [{x:60,y:360},{x:900,y:285}];
+    return pts;
+}
+
+// move o mascote DOM para a posição proporcional ao percentual
+function moveMascoteParaPercentual(percent) {
+    // clamp
+    const p = Math.max(0, Math.min(100, Number(percent)));
+    const pts = getRangeOfPath();
+    // calcula posição interpolando ao longo do array de pontos
+    const n = pts.length;
+    if (n === 0) return;
+    const t = p/100 * (n - 1);
+    const idx = Math.floor(t);
+    const frac = t - idx;
+    const a = pts[idx];
+    const b = pts[Math.min(idx+1, n-1)];
+    const x = a.x + (b.x - a.x) * frac;
+    const y = a.y + (b.y - a.y) * frac;
+    // posiciona mascoteDom (usa coordenadas do svg convertidas para espaço do mapaCanvas)
+    const svg = document.getElementById("svgMapa");
+    const pt = svg.createSVGPoint();
+    pt.x = x; pt.y = y;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) { // fallback
+        const mascoteDom = document.getElementById("mascoteDom");
+        mascoteDom.style.left = x + "px";
+        mascoteDom.style.top = y + "px";
+        return;
+    }
+    const screenPt = pt.matrixTransform(ctm);
+    const mapaCanvas = document.getElementById("mapaCanvas");
+    const rect = mapaCanvas.getBoundingClientRect();
+    // ajusta para coordenadas relativas ao mapaCanvas
+    const left = screenPt.x - rect.left;
+    const top = screenPt.y - rect.top;
+    const mascoteDom = document.getElementById("mascoteDom");
+    mascoteDom.style.left = left + "px";
+    mascoteDom.style.top = top + "px";
+    // atualiza legenda
+    document.getElementById("mapaPercent").textContent = Math.round(p) + "%";
+}
+
+// mostra o modal do mapa com animação do mascote deslocando-se para a posição atual
+function mostrarAnimacaoMapa(callbackDepois) {
+    const modal = document.getElementById("modalMapa");
+    modal.style.display = "flex";
+    modal.setAttribute("aria-hidden","false");
+    const mascote = document.getElementById("mascoteDom");
+    mascote.classList.add("pulse");
+
+    // calcula a porcentagem atual (usar a função existente)
+    const pct = calcularProgressoDiaAtual();
+
+    // pequena desaceleração visual: move para posição atual após delay breve
+    // para o usuário ver o mascote "entrando" e depois indo ao destino
+    // primeiro posiciona o mascote na borda esquerda (entrada)
+    const mapaCanvas = document.getElementById("mapaCanvas");
+    const rect = mapaCanvas.getBoundingClientRect();
+    // posiciona inicialmente na esquerda do mapa
+    mascote.style.left = "60px";
+    mascote.style.top = "360px";
+
+    // forçar repaint e depois mover para destino
+    requestAnimationFrame(() => {
+        // move para destino (a função moveMascoteParaPercentual usa coordenadas absolutas)
+        moveMascoteParaPercentual(pct);
+
+        // aguarda a transição terminar (1200ms definida no CSS)
+        setTimeout(() => {
+            mascote.classList.remove("pulse");
+            // se callback, executa após fechar (dá tempo para criança ver)
+            setTimeout(()=>{
+                if (callbackDepois) callbackDepois();
+            }, 300);
+        }, 1250);
+    });
+}
+
+// fecha mapa
+document.getElementById("fecharMapa").addEventListener("click", () => {
+    const modal = document.getElementById("modalMapa");
+    modal.style.display = "none";
+    modal.setAttribute("aria-hidden","true");
+});
+
+// botão ver mapa manual
+document.getElementById("btnVerMapa").addEventListener("click", ()=> {
+    // atualiza posicionamento antes de abrir
+    const pct = calcularProgressoDiaAtual();
+    moveMascoteParaPercentual(pct);
+    document.getElementById("modalMapa").style.display = "flex";
+});
+
+/* =========================
+   INICIALIZAÇÃO PRINCIPAL
+   ========================= */
+document.addEventListener("DOMContentLoaded", ()=> {
+    bloquearDiasExcetoHoje();
+
+    const checkboxes = document.querySelectorAll(".checkbox");
+    checkboxes.forEach((cb,i) => {
+        if (!cb.id) cb.id = "chk_" + i;
+        const saved = localStorage.getItem(cb.id);
+        if (saved === "true") cb.checked = true;
+        // intercept click
+        cb.addEventListener("click", (e) => {
+            e.preventDefault();
+            mostrarModalPergunta(cb);
+        });
+    });
+
+    // inicializa subtítulo com data
+    const hoje = new Date();
+    const d = String(hoje.getDate()).padStart(2,"0");
+    const m = String(hoje.getMonth()+1).padStart(2,"0");
+    const a = hoje.getFullYear();
+    document.querySelector(".subtitle").textContent = `Semana de ${d}/${m}/${a}`;
+
+    const col = {1:1,2:2,3:3,4:4,5:5,6:6}[hoje.getDay()];
+    if (col) {
+        document.querySelectorAll("table tr").forEach(row=>{
+            if (row.children[col]) row.children[col].classList.add("dia-atual");
+        });
+    }
+
+    atualizarRelogio();
+
+    // posiciona mascote corretamente quando a janela mudar de tamanho
+    window.addEventListener("resize", ()=> {
+        const pct = calcularProgressoDiaAtual();
+        // esperar um tick para recalcular CTM
+        setTimeout(()=> moveMascoteParaPercentual(pct), 120);
+    });
+});
+const mascote = document.getElementById("mascote");
+mascote.addEventListener("animationend", () => {
+    document.getElementById("modalMapa").style.display = "none";
+});
+/* =========================
+   LIMPAR DIA / RESET
+   ========================= */
+function limparDiaAtual() {
+    const modalConfirm = document.createElement("div");
+    modalConfirm.id = "modalConfirmar";
+    modalConfirm.className = "modal-confirmar";
+    modalConfirm.innerHTML = `
+        <div class="modal-confirm-conteudo">
+            <div class="modal-confirm-emoji">🗑️</div>
+            <div class="modal-confirm-texto">Limpar o Dia?</div>
+            <div class="modal-confirm-subtexto">Todas as tarefas de HOJE serão apagadas!</div>
+            <div class="modal-confirm-botoes">
+                <button class="btn-confirm-sim">✅ Sim, Limpar!</button>
+                <button class="btn-confirm-nao">❌ Cancelar</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modalConfirm);
+
+    modalConfirm.querySelector(".btn-confirm-sim").onclick = ()=>{
+        const dia = new Date().getDay();
+        const col = {1:1,2:2,3:3,4:4,5:5,6:6}[dia];
+        if (!col) return;
+        document.querySelectorAll("tbody tr").forEach(row=>{
+            const cel = row.children[col];
+            const chk = cel.querySelector("input[type='checkbox']");
+            if (chk) {
+                chk.checked = false;
+                localStorage.setItem(chk.id, "false");
+            }
+        });
+        atualizarRelogio();
+        modalConfirm.remove();
+        setTimeout(()=> mostrarModalSucesso(), 200);
+    };
+    modalConfirm.querySelector(".btn-confirm-nao").onclick = ()=> modalConfirm.remove();
+
+    document.onkeydown = (e) => { if (e.key === "Escape") modalConfirm.remove(); };
+}
+
+function resetarIdade() {
+    localStorage.removeItem("idadeCrianca");
+    localStorage.clear();
+    const modalErro = document.createElement("div");
+    modalErro.id = "modalErro";
+    modalErro.className = "modal-erro";
+    modalErro.innerHTML = `
+        <div class="modal-erro-conteudo">
+            <div class="modal-erro-emoji">💔</div>
+            <div class="modal-erro-texto">Quase! 😅</div>
+            <div class="modal-erro-subtexto">Clique para digitar sua idade!</div>
+            <button class="btn-erro-ok">✅ Tentar Novamente</button>
+        </div>
+    `;
+    document.body.appendChild(modalErro);
+    setTimeout(()=>{ if(modalErro.parentNode) modalErro.remove(); window.location.href = "index.html"; }, 3000);
+    modalErro.querySelector(".btn-erro-ok").onclick = ()=> modalErro.remove();
+}
+
+</script>
+</body>
+</html>
