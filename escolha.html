@@ -84,6 +84,37 @@ h2 {
     70% { transform: scale(0.9); }
     100% { transform: scale(1); opacity: 1; }
 }
+/* Adicione após os estilos existentes */
+@media screen and (max-width: 768px) {
+    .box {
+        width: 95% !important;
+        max-width: none;
+        min-height: 80vh;
+        padding: 30px 25px;
+        margin: 2% auto;
+    }
+    
+    h2 {
+        font-size: 1.8em;
+    }
+    
+    .btn {
+        padding: 16px;
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .box {
+        width: 98% !important;
+        padding: 25px 20px;
+        border-radius: 15px;
+    }
+    
+    h2 {
+        font-size: 1.6em;
+    }
+}
 </style>
 
 </head>
