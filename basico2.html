@@ -3,11 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quadro de Tarefas - Avançado</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Quadro de Tarefas</title>
+    <link rel="stylesheet" href="style2.css">
 </head>
 <body>
     <canvas id="fireworksCanvas"></canvas>
+    
+    <!-- MODAL DAS PERGUNTAS (AGORA COM OPCÕES) -->
+    <div id="modalPergunta" class="modal-pergunta">
+        <div class="modal-conteudo">
+            <div class="modal-pergunta-texto" id="modalPerguntaTexto"></div>
+            <div class="modal-opcoes" id="modalOpcoes"></div>
+            <div class="modal-botoes">
+                <button id="modalBtnCancelar" class="btn-modal cancelar">❌ Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+
 <!-- MODAL DO MAPA -->
 <div id="modalMapa" class="modal-mapa" aria-hidden="true">
     <div class="mapa-wrapper" role="dialog" aria-modal="true">
@@ -101,113 +114,101 @@
 
     </div>
 </div>
-    <!-- MODAL DAS PERGUNTAS -->
-    <div id="modalPergunta" class="modal-pergunta">
-        <div class="modal-conteudo">
-            <div class="modal-pergunta-texto" id="modalPerguntaTexto"></div>
-            <div class="modal-opcoes" id="modalOpcoes"></div>
-            <div class="modal-botoes">
-            <button id="modalBtnCancelar" class="btn-modal cancelar">❌ Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal erro -->
+    <!-- MODAL DE ERRO (mantida) -->
     <div id="modalErroTemplate" style="display: none;"></div>
 
-<div class="container">
-    <div class="header">
-        <div class="header-line">
-            <h1>QUADRO DE TAREFAS</h1>
-            <div class="progress-ring">
-                <svg width="90" height="90">
+    <div class="container">
+        <div class="header">
+            <div class="header-line">
+                <h1>QUADRO DE TAREFAS 🧠</h1>
+                <div class="progress-ring">
+                    <svg width="90" height="90">
                         <rcle class="progress-ring-bg" cx="45" cy="45" r="35"/>
                         <rcle class="progress-ring-progress" cx="45" cy="45" r="35"/>
-                </svg>
-                <div class="progress-text">0%</div>
+                    </svg>
+                    <div class="progress-text">0%</div>
+                </div>
             </div>
+            <p class="subtitle">Semana de ______</p>
         </div>
-        <p class="subtitle">Semana de ______</p>
-    </div>
         
-    <div id="parabensTexto">PARABÉNS!! 🎉</div>
+        <div id="parabensTexto">PARABÉNS!! 🎉</div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>TAREFAS</th>
-                <th>SEGUNDA</th>
-                <th>TERÇA</th>
-                <th>QUARTA</th>
-                <th>QUINTA</th>
-                <th>SEXTA</th>
-                <th>SÁBADO</th>
-            </tr>
-        </thead>
-        <tbody id="tbodyTarefas">
-            <!-- AS TAREFAS VIRÃO AUTOMATICAMENTE DO LOCALSTORAGE -->
-        </tbody>
-    </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>TAREFAS</th>
+                    <th>SEGUNDA</th>
+                    <th>TERÇA</th>
+                    <th>QUARTA</th>
+                    <th>QUINTA</th>
+                    <th>SEXTA</th>
+                    <th>SÁBADO</th>
+                </tr>
+            </thead>
+         <tbody>
+                <tr>
+                    <td class="task-cell"><div class="task-icon">📖</div>Ler 10 minutos</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                </tr>
+                <tr>
+                    <td class="task-cell"><div class="task-icon">🧹</div>Ajudar na limpeza</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                </tr>
+                <tr>
+                    <td class="task-cell"><div class="task-icon">📝</div>Fazer lição de casa</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                </tr>
+                <tr>
+                    <td class="task-cell"><div class="task-icon">🤝</div>Ajudar um adulto</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                </tr>
+                <tr>
+                    <td class="task-cell"><div class="task-icon">🏃</div>Atividade física 15min</td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                    <td><input type="checkbox" class="checkbox"></td>
+                </tr>
+            </tbody>
+        </table>
 
-    <div class="buttons">
-        <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
+        <div class="buttons">
+    <button class="btn btn-print" onclick="window.print()">🖨️ Imprimir</button>
     <button class="btn btn-clear" onclick="if(confirm('Deseja limpar todos os checks?')){localStorage.clear();location.reload();}">🔄 Limpar Semana</button>
     <!-- NOVO BOTÃO -->
-        <button class="btn btn-clear-day" onclick="limparDiaAtual()">🗑️ Limpar Dia</button>
-
-        <button class="btn btn-clear-idade" onclick="resetarIdade()">Alterar minha idade</button>
-        <a href="admin.html" class="btn-advanced" onclick="localStorage.setItem('origemAdmin', window.location.pathname)">
-    ⚙️ Administrar Tarefas
-</a>
-    </div>
+    <button class="btn btn-clear-day" onclick="limparDiaAtual()">🗑️ Limpar Dia</button>
+    <button class="btn btn-clear-idade" onclick="resetarIdade()">❗ Errei minha idade </button>
+    <button class="btn btn-advanced" id="btnVerMapa">🗺️ Ver Mapa</button>
 </div>
+    </div>
 
     <audio id="fireworkSound" src="fireworks2.mp3" preload="auto"></audio>
     <audio id="clickSound" src="click.mp3" preload="auto"></audio>
     <audio id="errorSound" src="erro.mp3" preload="auto"></audio>
     <audio id="pensando" src="super_mario_medley.mp3" preload="auto"></audio>
-
-<script src="nivel_basico.js"></script>
-
-<script>
-/* --------------------------------------
-   CARREGAR TAREFAS DO LOCALSTORAGE
----------------------------------------*/
-function carregarTarefasDinamicamente() {
-    const tbody = document.getElementById("tbodyTarefas");
-
-    let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
-
-    // Caso não haja tarefas, exibe uma linha avisando
-    if (tarefas.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7">Nenhuma tarefa cadastrada no admin.</td></tr>`;
-        return;
-    }
-
-    tbody.innerHTML = ""; // limpa tabela
-
-    tarefas.forEach(tarefa => {
-        let tr = document.createElement("tr");
-
-        tr.innerHTML = `
-            <td class="task-cell">
-                <div class="task-icon">⭐</div> ${tarefa}
-            </td>
-            <td><input type="checkbox" class="checkbox"></td>
-            <td><input type="checkbox" class="checkbox"></td>
-            <td><input type="checkbox" class="checkbox"></td>
-            <td><input type="checkbox" class="checkbox"></td>
-            <td><input type="checkbox" class="checkbox"></td>
-            <td><input type="checkbox" class="checkbox"></td>
-        `;
-
-        tbody.appendChild(tr);
-    });
-}
-
-// Executa ao carregar a página
-carregarTarefasDinamicamente();
-</script>
-
+    <script src="basico2.js"></script>
 </body>
 </html>
