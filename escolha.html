@@ -92,6 +92,7 @@ h2 {
         min-height: 80vh;
         padding: 30px 25px;
         margin: 2% auto;
+        
     }
     
     h2 {
@@ -104,17 +105,36 @@ h2 {
     }
 }
 
+
 @media screen and (max-width: 480px) {
-    .box {
-        width: 98% !important;
-        padding: 25px 20px;
-        border-radius: 15px;
+    body {
+        background: rgba(0,0,0,0.7);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
     }
-    
+
+    .box {
+        width: 100vw;      /* ocupa toda a largura visível */
+        max-width: none;   /* remove limite de 420px */
+        height: 100vh;     /* opcional: tela inteira */
+        border-radius: 0;  /* opcional: sem cantos arredondados, estilo tela cheia */
+        padding: 25px 20px;
+        margin: 0;
+    }
+
     h2 {
         font-size: 1.6em;
     }
+
+    .btn {
+        padding: 16px;
+        font-size: 1.2em;
+    }
 }
+
 </style>
 
 </head>
